@@ -1111,11 +1111,12 @@ class="btn-gold px-8 py-3 rounded-xl text-sm whitespace-nowrap cursor-pointer fl
           >
             <!-- 1. Mtra. Gaby -->
             <div
-              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center"
+              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center cursor-pointer"
               style="
                 border: 1px solid rgba(255, 0, 127, 0.35);
                 box-shadow: 0 0 18px rgba(255, 0, 127, 0.12);
               "
+              onclick="openSpeakerModal('Mtra. Gaby', 'imagenes/gaby.jpg', 'PONENTE', '#ff007f')"
             >
               <div
                 class="absolute top-0 left-0 right-0 h-px"
@@ -1164,11 +1165,12 @@ class="btn-gold px-8 py-3 rounded-xl text-sm whitespace-nowrap cursor-pointer fl
 
             <!-- 2. Maestro Ever -->
             <div
-              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center"
+              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center cursor-pointer"
               style="
                 border: 1px solid rgba(0, 229, 255, 0.35);
                 box-shadow: 0 0 18px rgba(0, 229, 255, 0.12);
               "
+              onclick="openSpeakerModal('Maestro Ever', 'imagenes/ever.jpg', 'PONENTE', '#00e5ff')"
             >
               <div
                 class="absolute top-0 left-0 right-0 h-px"
@@ -1217,11 +1219,12 @@ class="btn-gold px-8 py-3 rounded-xl text-sm whitespace-nowrap cursor-pointer fl
 
             <!-- 3. Maestro Romario -->
             <div
-              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center"
+              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center cursor-pointer"
               style="
                 border: 1px solid rgba(155, 0, 255, 0.35);
                 box-shadow: 0 0 18px rgba(155, 0, 255, 0.12);
               "
+              onclick="openSpeakerModal('Maestro Romario', 'imagenes/romario.jpg', 'PONENTE', '#9b00ff')"
             >
               <div
                 class="absolute top-0 left-0 right-0 h-px"
@@ -1270,11 +1273,12 @@ class="btn-gold px-8 py-3 rounded-xl text-sm whitespace-nowrap cursor-pointer fl
 
             <!-- 4. La Profe Rocío -->
             <div
-              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center"
+              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center cursor-pointer"
               style="
                 border: 1px solid rgba(255, 229, 0, 0.35);
                 box-shadow: 0 0 18px rgba(255, 229, 0, 0.1);
               "
+              onclick="openSpeakerModal('La Profe Rocío', 'imagenes/rocio.jpg', 'PONENTE', '#ffe500')"
             >
               <div
                 class="absolute top-0 left-0 right-0 h-px"
@@ -1325,11 +1329,12 @@ class="btn-gold px-8 py-3 rounded-xl text-sm whitespace-nowrap cursor-pointer fl
 
             <!-- 5. Azalhia Edith -->
             <div
-              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center"
+              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center cursor-pointer"
               style="
                 border: 1px solid rgba(155, 0, 255, 0.35);
                 box-shadow: 0 0 18px rgba(155, 0, 255, 0.12);
               "
+              onclick="openSpeakerModal('Azalhia Edith', 'imagenes/azalhia.jpg', 'PONENTE', '#9b00ff')"
             >
               <div
                 class="absolute top-0 left-0 right-0 h-px"
@@ -1676,7 +1681,88 @@ class="btn-gold px-8 py-3 rounded-xl text-sm whitespace-nowrap cursor-pointer fl
 
         startAuto();
       })();
+
+      // Speaker Zoom Modal functions
+      window.openSpeakerModal = function(name, imgSrc, role, color) {
+        document.getElementById('speakerZoomImg').src = imgSrc;
+        document.getElementById('speakerZoomName').textContent = name;
+        document.getElementById('speakerZoomRole').textContent = role;
+        document.getElementById('speakerZoomRole').style.color = color;
+        document.getElementById('speakerZoomGlow').style.background = color;
+        document.getElementById('speakerZoomImgContainer').style.borderColor = color;
+        document.getElementById('speakerZoomImgContainer').style.boxShadow = `0 0 30px ${color}80`;
+        document.getElementById('speakerZoomStatusDot').style.background = color;
+        document.getElementById('speakerZoomStatusDot').style.boxShadow = `0 0 10px ${color}`;
+        
+        const isFemale = name.includes('Gaby') || name.includes('Rocío') || name.includes('Azalhia') || name.includes('Edith') || name.includes('Miss') || name.includes('Profe');
+        document.getElementById('speakerZoomStatusText').textContent = isFemale ? 'CONFIRMADA' : 'CONFIRMADO';
+        document.getElementById('speakerZoomStatusText').style.color = color;
+
+        const modal = document.getElementById('speakerZoomModal');
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      };
+
+      window.closeSpeakerModal = function() {
+        const modal = document.getElementById('speakerZoomModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      };
     </script>
+
+    <!-- ==========================================
+         SPEAKER ZOOM MODAL HTML
+    ========================================== -->
+    <style>
+      #speakerZoomModal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(3, 6, 18, 0.9);
+        z-index: 10000;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      #speakerZoomModal.active {
+        display: flex;
+        opacity: 1;
+      }
+      #speakerZoomContent {
+        transform: scale(0.9);
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        max-width: 520px;
+        width: 95%;
+      }
+      #speakerZoomModal.active #speakerZoomContent {
+        transform: scale(1);
+      }
+    </style>
+
+    <div id="speakerZoomModal" onclick="closeSpeakerModal()">
+      <div id="speakerZoomContent" class="card-dark rounded-3xl p-6 text-center relative overflow-hidden" onclick="event.stopPropagation()">
+        <!-- Glow top -->
+        <div id="speakerZoomGlow" class="absolute top-0 left-0 right-0 h-1" style="background: #ff007f;"></div>
+        <!-- Close button -->
+        <button onclick="closeSpeakerModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors cursor-pointer text-lg font-bold" style="background: none; border: none; z-index: 10;">✕</button>
+        <!-- Speaker Image Large (Full Flyer) -->
+        <div id="speakerZoomImgContainer" class="w-full rounded-2xl overflow-hidden flex items-center justify-center mx-auto mt-6 mb-6" style="border: 2px solid #ff007f; box-shadow: 0 0 25px rgba(255, 0, 127, 0.4); max-height: 65vh; background: rgba(0,0,0,0.3);">
+          <img id="speakerZoomImg" src="" alt="Speaker" class="w-full h-auto object-contain max-h-[63vh] rounded-xl" />
+        </div>
+        <!-- Speaker Name -->
+        <h3 id="speakerZoomName" class="font-orbitron font-bold text-2xl text-white mb-1">Speaker Name</h3>
+        <!-- Speaker Role -->
+        <div id="speakerZoomRole" class="font-rajdhani text-sm tracking-widest font-bold mb-4" style="color: #ff007f;">PONENTE</div>
+        <!-- Badge Confirmado -->
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);">
+          <span id="speakerZoomStatusDot" class="w-2 h-2 rounded-full" style="background: #ff007f; box-shadow: 0 0 8px #ff007f;"></span>
+          <span id="speakerZoomStatusText" class="font-rajdhani text-xs tracking-widest" style="color: #cbd5e1;">CONFIRMADA</span>
+        </div>
+      </div>
+    </div>
     <footer
 class="relative py-10 px-4 text-center"
 style="border-top: 1px solid rgba(0, 229, 255, 0.08)"
