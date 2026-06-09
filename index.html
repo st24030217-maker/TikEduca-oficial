@@ -1140,168 +1140,115 @@
         ⬢
       </div>
 
-      <div class="relative z-10 max-w-6xl mx-auto px-4 py-12">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <div class="relative z-10 max-w-6xl mx-auto px-5 py-10">
+        <div class="flex flex-col lg:grid lg:grid-cols-12 lg:gap-12 lg:items-center">
+
+          <!-- Image/Logo — aparece PRIMERO en móvil -->
+          <div class="lg:col-span-5 lg:order-2 flex justify-center w-full mb-8 lg:mb-0">
+            <div class="hero-logo-wrapper relative group">
+              <div class="absolute -inset-4 rounded-[32px] opacity-45 blur-2xl group-hover:opacity-75 transition duration-1000 animate-pulse-slow" style="background: linear-gradient(135deg, #ff007f, #9b00ff, #00e5ff);"></div>
+              <div class="absolute -inset-1 rounded-[28px] opacity-30 group-hover:opacity-60 transition duration-700" style="background: linear-gradient(135deg, #ff007f, #00e5ff);"></div>
+              <img 
+                src="imagenes/logo_pagina.jpg" 
+                alt="TikEduca Congreso Educativo Guadalajara" 
+                class="relative hero-logo-img w-[240px] sm:w-[290px] md:w-[340px] lg:w-full max-w-[360px] object-contain rounded-3xl shadow-2xl transition-all duration-500 hover:scale-[1.02]"
+                style="border: 1px solid rgba(255,255,255,0.1);"
+              />
+            </div>
+          </div>
+
           <!-- Text column -->
-          <div class="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left">
+          <div class="lg:col-span-7 lg:order-1 flex flex-col items-center lg:items-start text-center lg:text-left">
             <!-- Badge -->
             <div
-              class="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full border border-cyan-400/30"
+              class="inline-flex items-center gap-2 mb-5 px-4 py-2 rounded-full border border-cyan-400/30"
               style="background: rgba(0, 229, 255, 0.05)"
             >
               <span
                 class="w-2 h-2 rounded-full bg-cyan-400 inline-block"
-                style="
-                  box-shadow: 0 0 8px #00e5ff;
-                  animation: pulseGlow 2s ease-in-out infinite;
-                  color: #00e5ff;
-                "
+                style="box-shadow: 0 0 8px #00e5ff; animation: pulseGlow 2s ease-in-out infinite;"
               ></span>
-              <span class="font-rajdhani text-cyan-400 text-sm tracking-widest"
+              <span class="font-rajdhani text-cyan-400 text-xs sm:text-sm tracking-widest"
                 >COMUNIDAD ACTIVA · + DE 10,000 MAESTROS</span
               >
             </div>
 
             <!-- Main heading -->
-            <h1 class="font-orbitron font-black leading-tight mb-6">
-              <span class="block text-3xl md:text-5xl lg:text-6xl text-white mb-2">
+            <h1 class="font-orbitron font-black leading-tight mb-5">
+              <span class="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white mb-1">
                 LA REVOLUCIÓN
               </span>
               <span
-                class="block text-4xl md:text-6xl lg:text-7xl glitch"
-                style="
-                  color: var(--cyan);
-                  text-shadow:
-                    0 0 20px #00e5ff,
-                    0 0 40px #00e5ff;
-                "
+                class="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl glitch"
+                style="color: var(--cyan); text-shadow: 0 0 20px #00e5ff, 0 0 40px #00e5ff;"
               >
                 EDUCATIVA
               </span>
-              <span class="block text-3xl md:text-5xl lg:text-6xl text-white mt-1">
-                YA
-                <span style="color: var(--pink); text-shadow: 0 0 20px #ff007f"
-                  >COMENZÓ.</span
-                >
+              <span class="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white mt-1">
+                YA <span style="color: var(--pink); text-shadow: 0 0 20px #ff007f">COMENZÓ.</span>
               </span>
             </h1>
 
             <!-- Subheading -->
-            <p
-              class="font-space text-gray-300 text-lg max-w-2xl mb-4 leading-relaxed"
-            >
+            <p class="font-space text-gray-300 text-base sm:text-lg max-w-xl mb-3 leading-relaxed px-2 lg:px-0">
               La <strong class="text-cyan-400">Mtra. Gaby</strong> lidera el
               movimiento que está transformando cómo los docentes usan la
               tecnología. <span class="text-pink-400">TikEduca</span> no es una
               plataforma; es tu tribu, tu evolución, tu futuro.
             </p>
-            <p
-              class="font-rajdhani text-gray-500 text-sm tracking-widest mb-10 uppercase"
-            >
-              Estrategias digitales · TikTok educativo · IA aplicada al aula ·
-              Comunidad activa 24/7
+            <p class="font-rajdhani text-gray-500 text-xs sm:text-sm tracking-widest mb-8 uppercase px-2 lg:px-0">
+              Estrategias digitales · TikTok educativo · IA aplicada al aula · Comunidad activa 24/7
             </p>
 
             <!-- CTA Buttons -->
-            <div
-              class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center lg:justify-start items-center"
-            >
+            <div class="flex flex-col sm:flex-row gap-3 w-full max-w-xs sm:max-w-none mx-auto lg:mx-0">
               <button
-                onclick="
-                  document
-                    .getElementById('registro')
-                    .scrollIntoView({ behavior: 'smooth' })
-                "
-                class="btn-primary px-8 py-4 rounded-xl text-base w-full sm:w-auto cursor-pointer"
+                onclick="document.getElementById('registro').scrollIntoView({ behavior: 'smooth' })"
+                class="btn-primary px-6 py-4 rounded-xl text-sm sm:text-base w-full sm:w-auto cursor-pointer"
               >
                 ⟶ UNIRME A TIKEDUCA GRATIS
               </button>
               <button
-                class="btn-secondary px-8 py-4 rounded-xl text-base w-full sm:w-auto cursor-pointer"
-                onclick="
-                  document
-                    .getElementById('comunidad')
-                    .scrollIntoView({ behavior: 'smooth' })
-                "
+                class="btn-secondary px-6 py-4 rounded-xl text-sm sm:text-base w-full sm:w-auto cursor-pointer"
+                onclick="document.getElementById('comunidad').scrollIntoView({ behavior: 'smooth' })"
               >
                 ▶ VER CÓMO FUNCIONA
               </button>
             </div>
 
             <!-- Social proof -->
-            <div class="mt-12 flex flex-wrap justify-center lg:justify-start gap-8 text-center lg:text-left">
+            <div class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-5 w-full max-w-xs sm:max-w-none mx-auto lg:mx-0 text-center lg:text-left">
               <div>
-                <div class="font-orbitron font-bold text-2xl neon-cyan">+10K</div>
-                <div class="font-rajdhani text-gray-500 text-sm tracking-wider">
-                  MAESTROS ACTIVOS
-                </div>
+                <div class="font-orbitron font-bold text-xl sm:text-2xl neon-cyan">+10K</div>
+                <div class="font-rajdhani text-gray-500 text-xs tracking-wider mt-1">MAESTROS ACTIVOS</div>
               </div>
-              <div class="hidden sm:block w-px bg-gray-800"></div>
               <div>
-                <div class="font-orbitron font-bold text-2xl neon-pink">+50</div>
-                <div class="font-rajdhani text-gray-500 text-sm tracking-wider">
-                  PAÍSES
-                </div>
+                <div class="font-orbitron font-bold text-xl sm:text-2xl neon-pink">+50</div>
+                <div class="font-rajdhani text-gray-500 text-xs tracking-wider mt-1">PAÍSES</div>
               </div>
-              <div class="hidden sm:block w-px bg-gray-800"></div>
               <div>
-                <div
-                  class="font-orbitron font-bold text-2xl"
-                  style="color: #9b00ff; text-shadow: 0 0 10px #9b00ff"
-                >
-                  4.9★
-                </div>
-                <div class="font-rajdhani text-gray-500 text-sm tracking-wider">
-                  CALIFICACIÓN
-                </div>
+                <div class="font-orbitron font-bold text-xl sm:text-2xl" style="color: #9b00ff; text-shadow: 0 0 10px #9b00ff">4.9★</div>
+                <div class="font-rajdhani text-gray-500 text-xs tracking-wider mt-1">CALIFICACIÓN</div>
               </div>
-              <div class="hidden sm:block w-px bg-gray-800"></div>
               <div>
-                <div
-                  class="font-orbitron font-bold text-2xl"
-                  style="color: #ffe500; text-shadow: 0 0 10px #ffe500"
-                >
-                  100%
-                </div>
-                <div class="font-rajdhani text-gray-500 text-sm tracking-wider">
-                  GRATIS
-                </div>
+                <div class="font-orbitron font-bold text-xl sm:text-2xl" style="color: #ffe500; text-shadow: 0 0 10px #ffe500">100%</div>
+                <div class="font-rajdhani text-gray-500 text-xs tracking-wider mt-1">GRATIS</div>
               </div>
             </div>
           </div>
 
-          <!-- Image/Logo Column -->
-          <div class="lg:col-span-5 flex justify-center w-full mt-10 lg:mt-0">
-            <div class="hero-logo-wrapper relative group">
-              <!-- Animated outer glowing rings -->
-              <div class="absolute -inset-4 rounded-[32px] opacity-45 blur-2xl group-hover:opacity-75 transition duration-1000 group-hover:duration-200 animate-pulse-slow" style="background: linear-gradient(135deg, #ff007f, #9b00ff, #00e5ff);"></div>
-              <div class="absolute -inset-1 rounded-[28px] opacity-30 group-hover:opacity-60 transition duration-700" style="background: linear-gradient(135deg, #ff007f, #00e5ff);"></div>
-              <!-- Main logo image -->
-              <img 
-                src="imagenes/logo_pagina.jpg" 
-                alt="TikEduca Congreso Educativo Guadalajara" 
-                class="relative hero-logo-img w-[260px] sm:w-[300px] md:w-[340px] lg:w-full max-w-[360px] object-contain rounded-3xl shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:rotate-[0.5deg]"
-                style="border: 1px solid rgba(255, 255, 255, 0.1);"
-              />
-            </div>
-          </div>
         </div>
       </div>
 
-        <!-- Scroll indicator -->
-        <div class="mt-16 flex flex-col items-center gap-2 opacity-40">
-          <div class="font-rajdhani text-xs tracking-widest text-gray-500">
-            DESLIZA PARA DESCUBRIR MÁS
-          </div>
-          <div
-            class="w-5 h-8 border border-gray-700 rounded-full flex items-start justify-center pt-1"
-          >
-            <div
-              class="w-1 h-2 bg-cyan-400 rounded-full"
-              style="animation: scan 1.5s linear infinite"
-            ></div>
-          </div>
+      <!-- Scroll indicator -->
+      <div class="mt-10 pb-6 flex flex-col items-center gap-2 opacity-40">
+        <div class="font-rajdhani text-xs tracking-widest text-gray-500">
+          DESLIZA PARA DESCUBRIR MÁS
         </div>
+        <div class="w-5 h-8 border border-gray-700 rounded-full flex items-start justify-center pt-1">
+          <div class="w-1 h-2 bg-cyan-400 rounded-full" style="animation: scan 1.5s linear infinite"></div>
+        </div>
+      </div>
       </div>
     </section>
 
