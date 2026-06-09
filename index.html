@@ -1,4 +1,4 @@
-<!doctype html><html lang="es"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>TikEduca — Comunidad de Educadores del Futuro</title><link rel="icon" href="imagenes/logo.jpg" type="image/jpeg" /><link rel="shortcut icon" href="imagenes/logo.jpg" type="image/jpeg" /><meta property="og:type" content="website" /><meta property="og:url" content="https://tikeduca.com/" /><meta property="og:title" content="TikEduca — Comunidad de Educadores del Futuro" /><meta property="og:description" content="Congreso Educativo Guadalajara 2026. Aprende, crea y transforma la educación en la era digital." /><meta property="og:image" content="imagenes/logo_pagina.jpg" /><meta property="twitter:card" content="summary_large_image" /><meta property="twitter:title" content="TikEduca — Comunidad de Educadores del Futuro" /><meta property="twitter:description" content="Congreso Educativo Guadalajara 2026. Aprende, crea y transforma la educación en la era digital." /><meta property="twitter:image" content="imagenes/logo_pagina.jpg" /><link
+<!doctype html><html lang="es"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>TikEduca — Comunidad de Educadores del Futuro</title><link rel="icon" href="imagenes/logo.jpg" type="image/jpeg" /><link rel="shortcut icon" href="imagenes/logo.jpg" type="image/jpeg" /><meta property="og:type" content="website" /><meta property="og:url" content="https://tikeduca.com/" /><meta property="og:title" content="TikEduca — Comunidad de Educadores del Futuro" /><meta property="og:description" content="Congreso Educativo Guadalajara 2026. Aprende, crea y transforma la educación en la era digital." /><meta property="og:image" content="https://tikeduca.com/imagenes/logo_pagina.jpg" /><meta property="twitter:card" content="summary_large_image" /><meta property="twitter:title" content="TikEduca — Comunidad de Educadores del Futuro" /><meta property="twitter:description" content="Congreso Educativo Guadalajara 2026. Aprende, crea y transforma la educación en la era digital." /><meta property="twitter:image" content="https://tikeduca.com/imagenes/logo_pagina.jpg" /><link
 href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&display=swap"
 rel="stylesheet"
 /><script src="https://cdn.tailwindcss.com" defer></script><script>tailwind.config = {
@@ -74,16 +74,9 @@ class="font-rajdhani text-sm tracking-wider transition-colors flex items-center 
 style="color: #ffe500; text-shadow: 0 0 8px rgba(255, 229, 0, 0.6)"
 >
 ⬡ HOSPEDAJE
-</a></div><button
-onclick="
-document
-.getElementById('registro')
-.scrollIntoView({ behavior: 'smooth' })
-"
-class="hidden md:block btn-primary px-4 py-2 rounded-lg text-xs font-orbitron tracking-wider cursor-pointer"
->
-ÚNETE AHORA →
-</button><button
+</a><a href="#ponentes" class="text-gray-400 hover:text-pink-400 font-rajdhani text-sm tracking-wider transition-colors ml-4">PONENTES</a></div><div class="flex items-center gap-3">
+<button onclick="document.getElementById('registro').scrollIntoView({ behavior: 'smooth' })" class="btn-primary px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-orbitron tracking-wider cursor-pointer">ÚNETE →</button>
+</div><button
 id="navHamburger"
 onclick="openMobileMenu()"
 class="md:hidden flex flex-col justify-center items-center gap-1.5 w-10 h-10 rounded-lg border border-cyan-400/30 bg-transparent cursor-pointer"
@@ -947,7 +940,744 @@ onclick="openHotelModal(null)"
 class="btn-gold px-8 py-3 rounded-xl text-sm whitespace-nowrap cursor-pointer flex-shrink-0"
 >
 ⬡ RESERVAR HABITACIÓN →
-</button></div></div></section><footer
+</button></div></div></section>
+    <!-- ==========================================
+         PONENTES - SECCIÓN
+    ========================================== -->
+    <style>
+      #ponentesScroll::-webkit-scrollbar {
+        display: none;
+      }
+      #ponentesScroll {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .ponente-card {
+        transition:
+          transform 0.3s,
+          box-shadow 0.3s,
+          filter 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 0.8s;
+      }
+      .ponente-card:hover {
+        transform: translateY(-6px);
+      }
+
+      /* Estilos para el estado sorpresa (no revelado) */
+      #ponentes:not(.is-revealed) .ponente-card {
+        filter: blur(10px) grayscale(90%);
+        opacity: 0.35;
+        pointer-events: none;
+      }
+      #ponentes:not(.is-revealed) #ponentesScroll {
+        overflow-x: hidden !important;
+        touch-action: none;
+        cursor: default !important;
+      }
+      #ponentes:not(.is-revealed) #ponentesDots,
+      #ponentes:not(.is-revealed) #ponentesControls {
+        opacity: 0;
+        pointer-events: none;
+        visibility: hidden;
+        height: 0;
+        margin-top: 0;
+        overflow: hidden;
+      }
+      #ponentesDots, #ponentesControls {
+        transition: all 0.5s ease;
+      }
+      #ponentes.is-revealed #ponentesOverlay {
+        display: none !important;
+      }
+      
+      @keyframes pulseSlow {
+        0%, 100% {
+          transform: scale(1);
+          box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+        }
+        50% {
+          transform: scale(1.05);
+          box-shadow: 0 0 25px rgba(255, 0, 127, 0.7);
+        }
+      }
+      .animate-pulse-slow {
+        animation: pulseSlow 3s ease-in-out infinite;
+      }
+    </style>
+
+    <section id="ponentes" class="relative py-20 px-4 overflow-hidden">
+      <script>
+        if (localStorage.getItem("ponentesRevealed") === "true") {
+          document.getElementById("ponentes").classList.add("is-revealed");
+        }
+      </script>
+      <div
+        class="absolute top-0 right-0 w-96 h-96 opacity-5 pointer-events-none rounded-full"
+        style="
+          background: radial-gradient(circle, #ff007f, transparent);
+          filter: blur(80px);
+        "
+      ></div>
+      <div
+        class="absolute bottom-0 left-0 w-80 h-80 opacity-5 pointer-events-none rounded-full"
+        style="
+          background: radial-gradient(circle, #9b00ff, transparent);
+          filter: blur(70px);
+        "
+      ></div>
+
+      <div class="relative z-10 max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+          <div
+            class="badge border border-pink-500/40 text-pink-400 mb-4 inline-block"
+            style="background: rgba(255, 0, 127, 0.05)"
+          >
+            MAESTROS FEST 2.0
+          </div>
+          <h2
+            class="font-orbitron font-bold text-3xl md:text-4xl text-white mb-4"
+          >
+            Conoce a los <span class="neon-pink">Ponentes</span>
+          </h2>
+          <p class="font-space text-gray-400 max-w-xl mx-auto text-sm md:text-base">
+            Educadores visionarios listos para transformar la educación en Guadalajara.
+          </p>
+          <!-- Dot indicators -->
+          <div id="ponentesDots" class="flex justify-center gap-1.5 mt-5"></div>
+        </div>
+
+        <!-- Scroll wrapper -->
+        <div class="relative">
+          <div
+            class="absolute left-0 top-0 bottom-4 w-16 z-10 pointer-events-none"
+            style="background: linear-gradient(90deg, #030612 20%, transparent)"
+          ></div>
+          <div
+            class="absolute right-0 top-0 bottom-4 w-16 z-10 pointer-events-none"
+            style="
+              background: linear-gradient(-90deg, #030612 20%, transparent);
+            "
+          ></div>
+
+          <!-- Overlay para ponentes sorpresa -->
+          <div
+            id="ponentesOverlay"
+            class="absolute inset-0 z-20 flex flex-col items-center justify-center rounded-2xl p-6"
+            style="
+              background: rgba(3, 6, 18, 0.92);
+              border: 1px dashed rgba(255, 0, 127, 0.35);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              transition: opacity 0.7s ease, transform 0.7s ease;
+            "
+          >
+            <div class="text-center max-w-md">
+              <div
+                class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse-slow"
+                style="
+                  background: rgba(255, 0, 127, 0.08);
+                  border: 2px solid #ff007f;
+                  box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+                "
+              >
+                <span style="font-size: 1.8rem;">🎁</span>
+              </div>
+              <h3 class="font-orbitron font-bold text-xl text-white mb-2 tracking-widest">
+                LINE-UP <span class="neon-pink">SORPRESA</span>
+              </h3>
+              <p class="font-space text-gray-400 text-xs mb-6 leading-relaxed">
+                ¡Prepárate! Hemos seleccionado a los mejores educadores nacionales e internacionales para el Maestros Fest 2.0. ¿Quiénes serán?
+              </p>
+              <button
+                onclick="revealPonentes()"
+                class="px-6 py-2.5 rounded-xl font-orbitron text-xs tracking-wider transition-all duration-300 transform hover:scale-105 active:scale-95 cursor-pointer"
+                style="
+                  background: linear-gradient(135deg, #ff007f, #9b00ff);
+                  color: white;
+                  box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
+                  border: 1px solid rgba(255, 255, 255, 0.25);
+                "
+              >
+                ✨ REVELAR PONENTES
+              </button>
+            </div>
+          </div>
+
+          <div
+            id="ponentesScroll"
+            class="flex gap-4 overflow-x-auto pb-2"
+            style="-webkit-overflow-scrolling: touch; cursor: grab"
+          >
+            <!-- 1. Mtra. Gaby -->
+            <div
+              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center"
+              style="
+                border: 1px solid rgba(255, 0, 127, 0.35);
+                box-shadow: 0 0 18px rgba(255, 0, 127, 0.12);
+              "
+            >
+              <div
+                class="absolute top-0 left-0 right-0 h-px"
+                style="
+                  background: linear-gradient(
+                    90deg,
+                    transparent,
+                    #ff007f,
+                    transparent
+                  );
+                "
+              ></div>
+              <div
+                class="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center mx-auto mb-3"
+                style="
+                  border: 2px solid rgba(255, 0, 127, 0.5);
+                "
+              >
+                <img src="imagenes/gaby.jpg" alt="Mtra. Gaby" class="w-full h-full object-cover" />
+              </div>
+              <div class="font-orbitron font-bold text-white text-sm mb-0.5">
+                Mtra. Gaby
+              </div>
+              <div
+                class="font-rajdhani text-pink-400 text-xs tracking-wider mb-2"
+              >
+                FUNDADORA & LÍDER
+              </div>
+              <div
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full"
+                style="
+                  background: rgba(255, 0, 127, 0.08);
+                  border: 1px solid rgba(255, 0, 127, 0.3);
+                "
+              >
+                <span
+                  class="w-1.5 h-1.5 rounded-full"
+                  style="background: #ff007f; box-shadow: 0 0 5px #ff007f"
+                ></span>
+                <span
+                  class="font-rajdhani text-pink-400 text-xs tracking-widest"
+                  >CONFIRMADA</span
+                >
+              </div>
+            </div>
+
+            <!-- 2. Maestro Ever -->
+            <div
+              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center"
+              style="
+                border: 1px solid rgba(0, 229, 255, 0.35);
+                box-shadow: 0 0 18px rgba(0, 229, 255, 0.12);
+              "
+            >
+              <div
+                class="absolute top-0 left-0 right-0 h-px"
+                style="
+                  background: linear-gradient(
+                    90deg,
+                    transparent,
+                    #00e5ff,
+                    transparent
+                  );
+                "
+              ></div>
+              <div
+                class="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center mx-auto mb-3"
+                style="
+                  border: 2px solid rgba(0, 229, 255, 0.5);
+                "
+              >
+                <img src="imagenes/ever.jpg" alt="Maestro Ever" class="w-full h-full object-cover" />
+              </div>
+              <div class="font-orbitron font-bold text-white text-sm mb-0.5">
+                Maestro Ever
+              </div>
+              <div
+                class="font-rajdhani text-cyan-400 text-xs tracking-wider mb-2"
+              >
+                PONENTE
+              </div>
+              <div
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full"
+                style="
+                  background: rgba(0, 229, 255, 0.08);
+                  border: 1px solid rgba(0, 229, 255, 0.3);
+                "
+              >
+                <span
+                  class="w-1.5 h-1.5 rounded-full"
+                  style="background: #00e5ff; box-shadow: 0 0 5px #00e5ff"
+                ></span>
+                <span
+                  class="font-rajdhani text-cyan-400 text-xs tracking-widest"
+                  >CONFIRMADO</span
+                >
+              </div>
+            </div>
+
+            <!-- 3. Maestro Romario -->
+            <div
+              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center"
+              style="
+                border: 1px solid rgba(155, 0, 255, 0.35);
+                box-shadow: 0 0 18px rgba(155, 0, 255, 0.12);
+              "
+            >
+              <div
+                class="absolute top-0 left-0 right-0 h-px"
+                style="
+                  background: linear-gradient(
+                    90deg,
+                    transparent,
+                    #9b00ff,
+                    transparent
+                  );
+                "
+              ></div>
+              <div
+                class="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center mx-auto mb-3"
+                style="
+                  border: 2px solid rgba(155, 0, 255, 0.5);
+                "
+              >
+                <img src="imagenes/romario.jpg" alt="Maestro Romario" class="w-full h-full object-cover" />
+              </div>
+              <div class="font-orbitron font-bold text-white text-sm mb-0.5">
+                Maestro Romario
+              </div>
+              <div
+                class="font-rajdhani text-purple-400 text-xs tracking-wider mb-2"
+              >
+                PONENTE
+              </div>
+              <div
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full"
+                style="
+                  background: rgba(155, 0, 255, 0.08);
+                  border: 1px solid rgba(155, 0, 255, 0.3);
+                "
+              >
+                <span
+                  class="w-1.5 h-1.5 rounded-full"
+                  style="background: #9b00ff; box-shadow: 0 0 5px #9b00ff"
+                ></span>
+                <span
+                  class="font-rajdhani text-purple-400 text-xs tracking-widest"
+                  >CONFIRMADO</span
+                >
+              </div>
+            </div>
+
+            <!-- 4. La Profe Rocío -->
+            <div
+              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center"
+              style="
+                border: 1px solid rgba(255, 229, 0, 0.35);
+                box-shadow: 0 0 18px rgba(255, 229, 0, 0.1);
+              "
+            >
+              <div
+                class="absolute top-0 left-0 right-0 h-px"
+                style="
+                  background: linear-gradient(
+                    90deg,
+                    transparent,
+                    #ffe500,
+                    transparent
+                  );
+                "
+              ></div>
+              <div
+                class="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center mx-auto mb-3"
+                style="
+                  border: 2px solid rgba(255, 229, 0, 0.5);
+                "
+              >
+                <img src="imagenes/rocio.jpg" alt="La Profe Rocío" class="w-full h-full object-cover" />
+              </div>
+              <div class="font-orbitron font-bold text-white text-sm mb-0.5">
+                La Profe Rocío
+              </div>
+              <div
+                class="font-rajdhani text-xs tracking-wider mb-2"
+                style="color: #ffe500"
+              >
+                PONENTE
+              </div>
+              <div
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full"
+                style="
+                  background: rgba(255, 229, 0, 0.07);
+                  border: 1px solid rgba(255, 229, 0, 0.3);
+                "
+              >
+                <span
+                  class="w-1.5 h-1.5 rounded-full"
+                  style="background: #ffe500; box-shadow: 0 0 5px #ffe500"
+                ></span>
+                <span
+                  class="font-rajdhani text-xs tracking-widest"
+                  style="color: #ffe500"
+                  >CONFIRMADA</span
+                >
+              </div>
+            </div>
+
+            <!-- 5. Azalhia Edith -->
+            <div
+              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center"
+              style="
+                border: 1px solid rgba(155, 0, 255, 0.35);
+                box-shadow: 0 0 18px rgba(155, 0, 255, 0.12);
+              "
+            >
+              <div
+                class="absolute top-0 left-0 right-0 h-px"
+                style="
+                  background: linear-gradient(
+                    90deg,
+                    transparent,
+                    #9b00ff,
+                    transparent
+                  );
+                "
+              ></div>
+              <div
+                class="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center mx-auto mb-3"
+                style="
+                  border: 2px solid rgba(155, 0, 255, 0.5);
+                "
+              >
+                <img src="imagenes/azalhia.jpg" alt="Azalhia Edith" class="w-full h-full object-cover" />
+              </div>
+              <div class="font-orbitron font-bold text-white text-sm mb-0.5">
+                Azalhia Edith
+              </div>
+              <div
+                class="font-rajdhani text-purple-400 text-xs tracking-wider mb-2"
+              >
+                PONENTE
+              </div>
+              <div
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full"
+                style="
+                  background: rgba(155, 0, 255, 0.08);
+                  border: 1px solid rgba(155, 0, 255, 0.3);
+                "
+              >
+                <span
+                  class="w-1.5 h-1.5 rounded-full"
+                  style="background: #9b00ff; box-shadow: 0 0 5px #9b00ff"
+                ></span>
+                <span
+                  class="font-rajdhani text-purple-400 text-xs tracking-widest"
+                  >CONFIRMADA</span
+                >
+              </div>
+            </div>
+
+            <!-- 6. Próximamente 1 -->
+            <div
+              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center"
+              style="
+                border: 1px dashed rgba(0, 229, 255, 0.3);
+                box-shadow: 0 0 12px rgba(0, 229, 255, 0.05);
+              "
+            >
+              <div
+                class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3 animate-pulse"
+                style="
+                  background: rgba(0, 229, 255, 0.05);
+                  border: 2px dashed rgba(0, 229, 255, 0.4);
+                "
+              >
+                <span style="font-size: 1.5rem; color: rgba(0, 229, 255, 0.5);">❓</span>
+              </div>
+              <div class="font-orbitron font-bold text-gray-500 text-sm mb-0.5">
+                Próximamente
+              </div>
+              <div
+                class="font-rajdhani text-gray-600 text-xs tracking-wider mb-2"
+              >
+                CONGRESO 2026
+              </div>
+              <div
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full"
+                style="
+                  background: rgba(255, 255, 255, 0.03);
+                  border: 1px solid rgba(255, 255, 255, 0.05);
+                "
+              >
+                <span
+                  class="font-rajdhani text-gray-600 text-[10px] tracking-widest"
+                  >REVELACIÓN PRONTO</span
+                >
+              </div>
+            </div>
+
+            <!-- 7. Próximamente 2 -->
+            <div
+              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center"
+              style="
+                border: 1px dashed rgba(255, 0, 127, 0.3);
+                box-shadow: 0 0 12px rgba(255, 0, 127, 0.05);
+              "
+            >
+              <div
+                class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3 animate-pulse"
+                style="
+                  background: rgba(255, 0, 127, 0.05);
+                  border: 2px dashed rgba(255, 0, 127, 0.4);
+                "
+              >
+                <span style="font-size: 1.5rem; color: rgba(255, 0, 127, 0.5);">❓</span>
+              </div>
+              <div class="font-orbitron font-bold text-gray-500 text-sm mb-0.5">
+                Próximamente
+              </div>
+              <div
+                class="font-rajdhani text-gray-600 text-xs tracking-wider mb-2"
+              >
+                CONGRESO 2026
+              </div>
+              <div
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full"
+                style="
+                  background: rgba(255, 255, 255, 0.03);
+                  border: 1px solid rgba(255, 255, 255, 0.05);
+                "
+              >
+                <span
+                  class="font-rajdhani text-gray-600 text-[10px] tracking-widest"
+                  >REVELACIÓN PRONTO</span
+                >
+              </div>
+            </div>
+
+            <!-- 8. Próximamente 3 -->
+            <div
+              class="ponente-card flex-shrink-0 w-56 card-dark rounded-2xl p-5 relative overflow-hidden text-center"
+              style="
+                border: 1px dashed rgba(155, 0, 255, 0.3);
+                box-shadow: 0 0 12px rgba(155, 0, 255, 0.05);
+              "
+            >
+              <div
+                class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3 animate-pulse"
+                style="
+                  background: rgba(155, 0, 255, 0.05);
+                  border: 2px dashed rgba(155, 0, 255, 0.4);
+                "
+              >
+                <span style="font-size: 1.5rem; color: rgba(155, 0, 255, 0.5);">❓</span>
+              </div>
+              <div class="font-orbitron font-bold text-gray-500 text-sm mb-0.5">
+                Próximamente
+              </div>
+              <div
+                class="font-rajdhani text-gray-600 text-xs tracking-wider mb-2"
+              >
+                CONGRESO 2026
+              </div>
+              <div
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full"
+                style="
+                  background: rgba(255, 255, 255, 0.03);
+                  border: 1px solid rgba(255, 255, 255, 0.05);
+                "
+              >
+                <span
+                  class="font-rajdhani text-gray-600 text-[10px] tracking-widest"
+                  >REVELACIÓN PRONTO</span
+                >
+              </div>
+            </div>
+
+          </div>
+          <!-- /scroll row -->
+        </div>
+
+        <!-- Controls -->
+        <div id="ponentesControls" class="flex items-center justify-center gap-4 mt-6">
+          <button
+            onclick="pauseAutoScroll()"
+            id="btnPause"
+            class="w-9 h-9 rounded-full flex items-center justify-center transition-all cursor-pointer font-bold text-sm"
+            style="
+              background: rgba(0, 229, 255, 0.07);
+              border: 1px solid rgba(0, 229, 255, 0.25);
+              color: #00e5ff;
+            "
+            title="Pausar"
+          >
+            ⏸
+          </button>
+          <button
+            onclick="scrollPonentes(-1)"
+            class="w-9 h-9 rounded-full flex items-center justify-center transition-all cursor-pointer"
+            style="
+              background: rgba(0, 229, 255, 0.07);
+              border: 1px solid rgba(0, 229, 255, 0.25);
+              color: #00e5ff;
+            "
+          >
+            ←
+          </button>
+          <button
+            onclick="scrollPonentes(1)"
+            class="w-9 h-9 rounded-full flex items-center justify-center transition-all cursor-pointer"
+            style="
+              background: rgba(0, 229, 255, 0.07);
+              border: 1px solid rgba(0, 229, 255, 0.25);
+              color: #00e5ff;
+            "
+          >
+            →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      (function () {
+        const el = document.getElementById("ponentesScroll");
+        if (!el) return;
+
+        const section = document.getElementById("ponentes");
+        if (section && section.classList.contains("is-revealed")) {
+          const overlay = document.getElementById("ponentesOverlay");
+          if (overlay) overlay.remove();
+        }
+
+        // Drag to scroll
+        let isDown = false,
+          startX,
+          scrollLeft0;
+        el.addEventListener("mousedown", (e) => {
+          isDown = true;
+          el.style.cursor = "grabbing";
+          startX = e.pageX - el.offsetLeft;
+          scrollLeft0 = el.scrollLeft;
+          pauseAutoScroll();
+        });
+        el.addEventListener("mouseleave", () => {
+          isDown = false;
+          el.style.cursor = "grab";
+        });
+        el.addEventListener("mouseup", () => {
+          isDown = false;
+          el.style.cursor = "grab";
+        });
+        el.addEventListener("mousemove", (e) => {
+          if (!isDown) return;
+          e.preventDefault();
+          el.scrollLeft =
+            scrollLeft0 - (e.pageX - el.offsetLeft - startX) * 1.2;
+        });
+        el.addEventListener("touchstart", () => pauseAutoScroll(), {
+          passive: true,
+        });
+
+        // Dot indicators
+        const TOTAL = 8;
+        const dotsEl = document.getElementById("ponentesDots");
+        for (let i = 0; i < TOTAL; i++) {
+          const d = document.createElement("div");
+          d.style.cssText =
+            "width:6px;height:6px;border-radius:50%;background:rgba(255,0,127,0.2);transition:all 0.3s;";
+          dotsEl.appendChild(d);
+        }
+        function updateDots() {
+          const cardW = 224 + 16; // w-56 + gap
+          const idx = Math.round(el.scrollLeft / cardW);
+          Array.from(dotsEl.children).forEach((d, i) => {
+            d.style.background = i === idx ? "#ff007f" : "rgba(255,0,127,0.2)";
+            d.style.width = i === idx ? "18px" : "6px";
+            d.style.borderRadius = "3px";
+            d.style.boxShadow = i === idx ? "0 0 8px #ff007f" : "none";
+          });
+        }
+        el.addEventListener("scroll", updateDots, { passive: true });
+        updateDots();
+
+        // Auto-scroll
+        let autoTimer = null;
+        let paused = false;
+        const STEP = 240;
+        const INTERVAL = 2800;
+
+        function doAutoScroll() {
+          if (paused) return;
+          const maxScroll = el.scrollWidth - el.clientWidth;
+          if (el.scrollLeft >= maxScroll - 4) {
+            el.scrollTo({ left: 0, behavior: "smooth" });
+          } else {
+            el.scrollBy({ left: STEP, behavior: "smooth" });
+          }
+        }
+
+        function startAuto() {
+          const section = document.getElementById("ponentes");
+          if (!section || !section.classList.contains("is-revealed")) return;
+          clearInterval(autoTimer);
+          autoTimer = setInterval(doAutoScroll, INTERVAL);
+        }
+
+        window.pauseAutoScroll = function () {
+          paused = true;
+          clearInterval(autoTimer);
+          const btn = document.getElementById("btnPause");
+          if (btn) {
+            btn.textContent = "▶";
+            btn.title = "Reanudar";
+            btn.onclick = resumeAutoScroll;
+          }
+        };
+        window.resumeAutoScroll = function () {
+          paused = false;
+          startAuto();
+          const btn = document.getElementById("btnPause");
+          if (btn) {
+            btn.textContent = "⏸";
+            btn.title = "Pausar";
+            btn.onclick = pauseAutoScroll;
+          }
+        };
+        window.scrollPonentes = function (dir) {
+          pauseAutoScroll();
+          el.scrollBy({ left: dir * STEP, behavior: "smooth" });
+        };
+
+        window.revealPonentes = function () {
+          const section = document.getElementById("ponentes");
+          const overlay = document.getElementById("ponentesOverlay");
+          if (section) section.classList.add("is-revealed");
+          if (overlay) {
+            overlay.style.opacity = "0";
+            overlay.style.transform = "scale(0.95)";
+            overlay.style.pointerEvents = "none";
+            setTimeout(() => {
+              overlay.remove();
+            }, 700);
+          }
+          localStorage.setItem("ponentesRevealed", "true");
+          startAuto();
+        };
+
+        window.startAutoScroll = startAuto;
+
+        // Pause on hover, resume on leave
+        el.addEventListener("mouseenter", () => {
+          clearInterval(autoTimer);
+        });
+        el.addEventListener("mouseleave", () => {
+          if (!paused) startAuto();
+        });
+
+        startAuto();
+      })();
+    </script>
+    <footer
 class="relative py-10 px-4 text-center"
 style="border-top: 1px solid rgba(0, 229, 255, 0.08)"
 ><div class="max-w-4xl mx-auto flex flex-col items-center"><div class="w-12 h-12 rounded-xl overflow-hidden border border-cyan-400/20 mb-3 shadow-[0_0_15px_rgba(0,229,255,0.2)]"><img src="imagenes/logo.jpg" alt="Logo Footer" class="w-full h-full object-cover" / loading="lazy"></div><div class="font-orbitron font-bold text-lg neon-cyan mb-1">
@@ -2649,7 +3379,7 @@ spark.style.opacity = "0";
 });
 setTimeout(() => spark.remove(), 600);
 }
-});</script><style>#mobileMenuOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:9001;backdrop-filter:blur(4px)}#mobileMenuOverlay.open{display:block}#mobileMenuSheet{position:fixed;bottom:0;left:0;right:0;z-index:9002;background:#07102a;border-top:1px solid rgba(255,0,127,0.25);border-radius:24px 24px 0 0;padding:0 0 32px;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.16,1,0.3,1);max-height:88vh;overflow-y:auto}#mobileMenuSheet.open{transform:translateY(0)}.mmenu-handle{width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:14px auto 20px}.mmenu-ticket{display:flex;align-items:center;gap:14px;padding:14px 20px;border-radius:14px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.03);margin:0 16px 10px;cursor:pointer;transition:border-color 0.2s,background 0.2s;text-decoration:none}.mmenu-ticket:active{background:rgba(255,255,255,0.07)}.mmenu-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}.mmenu-label{font-family:'Orbitron',sans-serif;font-weight:700;font-size:11px;color:#e2e8f0;letter-spacing:0.5px}.mmenu-sub{font-family:'Space Grotesk',sans-serif;font-size:12px;color:#64748b;margin-top:2px}.mmenu-price{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:15px;margin-left:auto;white-space:nowrap;flex-shrink:0}.mmenu-divider{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:2px;color:#334155;text-transform:uppercase;padding:16px 20px 8px}.mmenu-cta{display:block;margin:18px 16px 0;padding:15px;border-radius:14px;background:linear-gradient(135deg,#ff007f,#9b00ff);text-align:center;font-family:'Orbitron',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;color:#fff;border:none;cursor:pointer;text-decoration:none}</style><div id="mobileMenuOverlay" onclick="closeMobileMenu()"></div><div id="mobileMenuSheet"><div class="mmenu-handle"></div><div style="padding: 0 20px 4px; display:flex; align-items:center; justify-content:space-between;"><span style="font-family:'Orbitron',sans-serif; font-weight:900; font-size:14px; color:#fff; letter-spacing:1px;">BOLETOS & PRECIOS</span><button onclick="closeMobileMenu()" style="background:none; border:none; color:#64748b; font-size:20px; cursor:pointer; padding:4px;">✕</button></div><div class="mmenu-divider">🎪 Eventos — 3 y 4 Oct 2026 · Guadalajara</div><div class="mmenu-ticket" onclick="closeMobileMenu(); setTimeout(()=>{ document.getElementById('registro').scrollIntoView({behavior:'smooth'}); selectTicket(document.querySelector('[onclick*=maestro_fest]'), 'maestro_fest'); }, 300)"><div class="mmenu-icon" style="background: rgba(0,229,255,0.1);">⬡</div><div><div class="mmenu-label">MAESTROS FEST</div><div class="mmenu-sub">Evento presencial · Networking</div></div><div class="mmenu-price" style="color:#00e5ff;">$1,000 <span style="font-size:11px;color:#64748b">MXN</span></div></div><div class="mmenu-ticket" onclick="closeMobileMenu(); setTimeout(()=>{ document.getElementById('registro').scrollIntoView({behavior:'smooth'}); selectTicket(document.querySelector('[onclick*=congreso]'), 'congreso'); }, 300)"><div class="mmenu-icon" style="background: rgba(255,0,127,0.1);">◈</div><div><div class="mmenu-label">CONGRESO EDUCATIVO</div><div class="mmenu-sub">Ponencias y talleres · Académico</div></div><div class="mmenu-price" style="color:#ff007f;">$1,300 <span style="font-size:11px;color:#64748b">MXN</span></div></div><div class="mmenu-ticket" style="border-color: rgba(255,229,0,0.25); background: rgba(255,229,0,0.03);"
+});</script><style>#mobileMenuOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:9001;backdrop-filter:blur(4px)}#mobileMenuOverlay.open{display:block}#mobileMenuSheet{position:fixed;bottom:0;left:0;right:0;z-index:9002;background:#07102a;border-top:1px solid rgba(255,0,127,0.25);border-radius:24px 24px 0 0;padding:0 0 32px;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.16,1,0.3,1);max-height:88vh;overflow-y:auto}#mobileMenuSheet.open{transform:translateY(0)}.mmenu-handle{width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:14px auto 20px}.mmenu-ticket{display:flex;align-items:center;gap:14px;padding:14px 20px;border-radius:14px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.03);margin:0 16px 10px;cursor:pointer;transition:border-color 0.2s,background 0.2s;text-decoration:none}.mmenu-ticket:active{background:rgba(255,255,255,0.07)}.mmenu-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}.mmenu-label{font-family:'Orbitron',sans-serif;font-weight:700;font-size:11px;color:#e2e8f0;letter-spacing:0.5px}.mmenu-sub{font-family:'Space Grotesk',sans-serif;font-size:12px;color:#64748b;margin-top:2px}.mmenu-price{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:15px;margin-left:auto;white-space:nowrap;flex-shrink:0}.mmenu-divider{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:2px;color:#334155;text-transform:uppercase;padding:16px 20px 8px}.mmenu-cta{display:block;margin:18px 16px 0;padding:15px;border-radius:14px;background:linear-gradient(135deg,#ff007f,#9b00ff);text-align:center;font-family:'Orbitron',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;color:#fff;border:none;cursor:pointer;text-decoration:none}</style><div id="mobileMenuOverlay" onclick="closeMobileMenu()"></div><div id="mobileMenuSheet"><div class="mmenu-handle"></div><div style="padding: 0 20px 4px; display:flex; align-items:center; justify-content:space-between;"><span style="font-family:'Orbitron',sans-serif; font-weight:900; font-size:14px; color:#fff; letter-spacing:1px;">NAVEGACIÓN & BOLETOS</span><button onclick="closeMobileMenu()" style="background:none; border:none; color:#64748b; font-size:20px; cursor:pointer; padding:4px;">✕</button></div><div class="mmenu-divider">🧭 Secciones</div><div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 14px;"><a href="#comunidad" onclick="closeMobileMenu()" class="mmenu-ticket" style="margin:0; flex:1 1 calc(50% - 4px); padding:10px 12px; gap:6px; justify-content:center;"><span style="font-size:14px;">👥</span><span class="mmenu-label" style="font-size:9px; letter-spacing:0.5px;">COMUNIDAD</span></a><a href="#" onclick="closeMobileMenu(); openFestModal(event);" class="mmenu-ticket" style="margin:0; flex:1 1 calc(50% - 4px); padding:10px 12px; gap:6px; justify-content:center; border-color:rgba(155,0,255,0.25);"><span style="font-size:14px;">🎪</span><span class="mmenu-label" style="font-size:9px; letter-spacing:0.5px; color:#9b00ff;">FEST</span></a><a href="#ponentes" onclick="closeMobileMenu()" class="mmenu-ticket" style="margin:0; flex:1 1 calc(50% - 4px); padding:10px 12px; gap:6px; justify-content:center; border-color:rgba(255,0,127,0.25);"><span style="font-size:14px;">🎙️</span><span class="mmenu-label" style="font-size:9px; letter-spacing:0.5px; color:#ff007f;">PONENTES</span></a><a href="#hospedaje" onclick="closeMobileMenu()" class="mmenu-ticket" style="margin:0; flex:1 1 calc(50% - 4px); padding:10px 12px; gap:6px; justify-content:center; border-color:rgba(255,229,0,0.25);"><span style="font-size:14px;">🏨</span><span class="mmenu-label" style="font-size:9px; letter-spacing:0.5px; color:#ffe500;">HOSPEDAJE</span></a><a href="#registro" onclick="closeMobileMenu()" class="mmenu-ticket" style="margin:0; flex:1 1 100%; padding:10px 12px; gap:6px; justify-content:center; border-color:rgba(0,229,255,0.25);"><span style="font-size:14px;">✍️</span><span class="mmenu-label" style="font-size:9px; letter-spacing:0.5px; color:#00e5ff;">REGISTRO</span></a></div><div class="mmenu-divider">🎪 Eventos — 3 y 4 Oct 2026 · Guadalajara</div><div class="mmenu-ticket" onclick="closeMobileMenu(); setTimeout(()=>{ document.getElementById('registro').scrollIntoView({behavior:'smooth'}); selectTicket(document.querySelector('[onclick*=maestro_fest]'), 'maestro_fest'); }, 300)"><div class="mmenu-icon" style="background: rgba(0,229,255,0.1);">⬡</div><div><div class="mmenu-label">MAESTROS FEST</div><div class="mmenu-sub">Evento presencial · Networking</div></div><div class="mmenu-price" style="color:#00e5ff;">$1,000 <span style="font-size:11px;color:#64748b">MXN</span></div></div><div class="mmenu-ticket" onclick="closeMobileMenu(); setTimeout(()=>{ document.getElementById('registro').scrollIntoView({behavior:'smooth'}); selectTicket(document.querySelector('[onclick*=congreso]'), 'congreso'); }, 300)"><div class="mmenu-icon" style="background: rgba(255,0,127,0.1);">◈</div><div><div class="mmenu-label">CONGRESO EDUCATIVO</div><div class="mmenu-sub">Ponencias y talleres · Académico</div></div><div class="mmenu-price" style="color:#ff007f;">$1,300 <span style="font-size:11px;color:#64748b">MXN</span></div></div><div class="mmenu-ticket" style="border-color: rgba(255,229,0,0.25); background: rgba(255,229,0,0.03);"
 onclick="closeMobileMenu(); setTimeout(()=>{ document.getElementById('registro').scrollIntoView({behavior:'smooth'}); selectTicket(document.querySelector('[onclick*=combo]'), 'combo'); }, 300)"><div class="mmenu-icon" style="background: rgba(255,229,0,0.1);">✦</div><div><div class="mmenu-label" style="color:#ffe500;">COMBO COMPLETO</div><div class="mmenu-sub">Fest + Congreso · ¡Mejor valor!</div><div class="mmenu-sub" style="color:#f472b6;">⏳ Válido hasta el 30 de julio</div></div><div class="mmenu-price" style="color:#ffe500;">$1,800 <span style="font-size:11px;color:#64748b">MXN</span></div></div><div class="mmenu-divider">🏨 Hospedaje — Hotel Convenio</div><div class="mmenu-ticket" onclick="closeMobileMenu(); setTimeout(()=>openHotelModal(null), 300)"><div class="mmenu-icon" style="background: rgba(155,0,255,0.1);">🛏</div><div><div class="mmenu-label">ESTÁNDAR DOBLE</div><div class="mmenu-sub">1 cama · Precio especial comunidad</div></div><div class="mmenu-price" style="color:#9b00ff;">$1,706 <span style="font-size:11px;color:#64748b">MXN/noche</span></div></div><div class="mmenu-ticket" onclick="closeMobileMenu(); setTimeout(()=>openHotelModal(null), 300)"><div class="mmenu-icon" style="background: rgba(155,0,255,0.1);">🛏</div><div><div class="mmenu-label">LUXURY KING</div><div class="mmenu-sub">2 camas · Precio especial comunidad</div></div><div class="mmenu-price" style="color:#9b00ff;">$2,006 <span style="font-size:11px;color:#64748b">MXN/noche</span></div></div><div class="mmenu-ticket" onclick="closeMobileMenu(); setTimeout(()=>openHotelModal(null), 300)"><div class="mmenu-icon" style="background: rgba(155,0,255,0.1);">⭐</div><div><div class="mmenu-label">GOBERNADOR</div><div class="mmenu-sub">Suite premium · Precio especial</div></div><div class="mmenu-price" style="color:#9b00ff;">$2,706 <span style="font-size:11px;color:#64748b">MXN/noche</span></div></div><button class="mmenu-cta" onclick="closeMobileMenu(); setTimeout(()=>document.getElementById('registro').scrollIntoView({behavior:'smooth'}), 300)">
 ⟶ REGISTRARME AHORA
 </button></div><script>function openMobileMenu() {
