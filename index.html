@@ -3200,7 +3200,7 @@ document.getElementById("viewFestSuccess").style.animation = "fadeIn 0.5s ease-o
 document.getElementById("step3dot").classList.remove("active");
 document.getElementById("step3dot").classList.add("done");
 const waMsg = `Hola, acabo de registrar mi pago por transferencia para el Maestros Fest 2.0.\nNombre de registro: ${userData.nombre}\nWhatsApp: ${userData.whatsapp}\nBoleto Seleccionado: ${ticketNames[ticket]}\nTitular de transferencia: ${nombre}\nReferencia: ${referencia}\nFecha de pago: ${fecha}\nComprobante adjunto: [${file.name}]`;
-const waUrl = `https://wa.me/523330000000?text=${encodeURIComponent(waMsg)}`;
+const waUrl = `https://wa.me/5213349004784?text=${encodeURIComponent(waMsg)}`;
 const nota = guardadoOk
 ? `<p class="text-green-400 text-xs mb-3">✅ Registro guardado en Google Sheets y comprobante en Drive.</p>`
 : `<p class="text-yellow-400 text-xs mb-3">⚠️ No se pudo guardar automáticamente. Envía el comprobante por WhatsApp.</p>`;
@@ -3487,7 +3487,7 @@ document.getElementById("conf_tipo").textContent = ROOM_LABELS[hotelState.tipo];
 document.getElementById("conf_noches").textContent = hotelState.noches + " noche(s)";
 document.getElementById("conf_total").textContent = "$" + total.toLocaleString("es-MX") + " MXN";
 const waMsg = `Hola, acabo de registrar mi pago por transferencia para la reserva de hotel del Maestros Fest 2.0.\nHuésped: ${hotelState.nombre} ${hotelState.apellidos}\nWhatsApp: ${hotelState.tel}\nHabitación: ${ROOM_LABELS[hotelState.tipo]}\nNoches: ${hotelState.noches}\nTotal Pagado: $${total.toLocaleString("es-MX")} MXN\nTitular de transferencia: ${transferNombre}\nReferencia: ${referencia}\nFecha de pago: ${fecha}\nComprobante adjunto: [${file.name}]`;
-const waUrl = `https://wa.me/523330000000?text=${encodeURIComponent(waMsg)}`;
+const waUrl = `https://wa.me/5213349004784?text=${encodeURIComponent(waMsg)}`;
 const nota = guardadoOk
 ? `<p class="text-green-400 text-xs mb-3">✅ Reserva guardada en Google Sheets y comprobante en Drive.</p>`
 : `<p class="text-yellow-400 text-xs mb-3">⚠️ No se pudo guardar automáticamente. Envía el comprobante por WhatsApp.</p>`;
