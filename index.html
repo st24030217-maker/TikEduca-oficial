@@ -3000,12 +3000,57 @@ if (e.isIntersecting) e.target.classList.add("section-visible");
 sections.forEach((s) => observer.observe(s));
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzAn1j0lKi-kIsKTp-RTpkTOkWWMeJq2HMIHZDm0jGIB8pl3mNGoSHb_Ld4s7EPxkia4A/exec";
 function fileToBase64(file) {
-return new Promise((resolve, reject) => {
-const reader = new FileReader();
-reader.onload = () => resolve(reader.result.split(",")[1]);
-reader.onerror = reject;
-reader.readAsDataURL(file);
-});
+  return new Promise((resolve, reject) => {
+    // Fallback for non-compressible or non-image files (like PDFs)
+    if (!file.type.startsWith("image/") || file.type.includes("gif")) {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(",")[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+      return;
+    }
+
+    // Compress image using HTML5 Canvas
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+        
+        // Define maximum bounding box dimensions (perfect for receipt documents)
+        const MAX_WIDTH = 1200;
+        const MAX_HEIGHT = 1200;
+        
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height = Math.round((height * MAX_WIDTH) / width);
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width = Math.round((width * MAX_HEIGHT) / height);
+            height = MAX_HEIGHT;
+          }
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Export to JPEG with a compression quality factor of 0.75 (reduces weight by 80-95% with no visual loss)
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.75);
+        resolve(dataUrl.split(",")[1]);
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
 let selectedRegTicket = "";
 const regTicketPrices = { congreso: 1300, maestrofest: 1000, combo: 1800 };
