@@ -958,21 +958,71 @@ class="font-space text-gray-400 max-w-xl mx-auto text-sm leading-relaxed"
 >
 Hotel convenio exclusivo para asistentes del Maestros Fest 2.0.
 Precios especiales negociados para nuestra comunidad.
-</p><div class="inline-flex flex-col sm:flex-row items-center justify-center gap-3 mt-5 mb-1"><div class="flex flex-col items-center gap-1 px-5 py-3 rounded-2xl" style="background:rgba(255,229,0,0.04);border:1px solid rgba(255,229,0,0.18);"><div class="font-orbitron font-black text-xl tracking-widest" style="color:#ffe500;text-shadow:0 0 15px #ffe500;">HOTEL HMB</div><div class="font-rajdhani text-gray-400 text-xs tracking-widest uppercase">Guadalajara Centro · Sede Oficial</div><div class="flex gap-1 mt-1" style="color:#ffe500;font-size:1rem;">★★★★</div><div class="font-space text-gray-500 text-[11px] mt-1">Av. Niños Héroes 125, Col. Centro, C.P. 44100<br>Guadalajara, Jalisco, México</div></div></div><div
-class="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-full"
-style="
-background: rgba(255, 0, 127, 0.06);
-border: 1px solid rgba(255, 0, 127, 0.2);
-"
-><span
-class="w-2 h-2 rounded-full bg-pink-500 inline-block"
-style="
-animation: pulseGlow 1.5s ease-in-out infinite;
-color: #ff007f;
-"
-></span><span class="font-rajdhani text-pink-400 text-xs tracking-widest"
->DISPONIBILIDAD LIMITADA · ÚLTIMAS HABITACIONES</span
-></div></div><div class="grid sm:grid-cols-3 gap-6 mb-10"><div
+</p></div>
+
+<div class="flex flex-col lg:flex-row gap-8 items-center max-w-4xl mx-auto mt-8 mb-12 reveal-on-scroll reveal-slide-up">
+  <!-- Left Side: Interactive Slide Card -->
+  <div class="w-full lg:w-1/2 relative group rounded-2xl overflow-hidden border border-yellow-500/20 bg-dark-card/60 shadow-[0_0_20px_rgba(255,229,0,0.05)] aspect-[4/3]">
+    <!-- Slides -->
+    <div id="hotelSlider" class="w-full h-full flex transition-transform duration-700 ease-in-out" style="width: 300%; transform: translateX(0%);">
+      <div class="w-full h-full flex-shrink-0 relative" style="width: 33.333%;">
+        <img src="imagenes/hotel_lobby.png" alt="Fachada del Hotel" class="w-full h-full object-cover">
+        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent p-4">
+          <div class="font-orbitron text-xs text-yellow-400 font-bold uppercase tracking-widest text-left">Hotel Misión Carlton</div>
+          <div class="font-space text-[10px] text-gray-300 text-left">Sede oficial del evento con instalaciones modernas y excelente ubicación.</div>
+        </div>
+      </div>
+      <div class="w-full h-full flex-shrink-0 relative" style="width: 33.333%;">
+        <img src="imagenes/hotel_room.png" alt="Habitación del Hotel" class="w-full h-full object-cover">
+        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent p-4">
+          <div class="font-orbitron text-xs text-purple-400 font-bold uppercase tracking-widest font-semibold text-left">Habitaciones Confortables</div>
+          <div class="font-space text-[10px] text-gray-300 text-left">Espacios amplios y cómodos diseñados para tu descanso y productividad.</div>
+        </div>
+      </div>
+      <div class="w-full h-full flex-shrink-0 relative" style="width: 33.333%;">
+        <img src="imagenes/hotel_pool.png" alt="Alberca del Hotel" class="w-full h-full object-cover">
+        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent p-4">
+          <div class="font-orbitron text-xs text-cyan-400 font-bold uppercase tracking-widest text-left">Alberca & Jardines</div>
+          <div class="font-space text-[10px] text-gray-300 text-left">Relájate en la alberca al aire libre rodeada de hermosos arcos coloniales.</div>
+        </div>
+      </div>
+    </div>
+    <!-- Arrow Controls -->
+    <button onclick="prevHotelSlide()" class="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 border border-yellow-500/20 text-yellow-400 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer z-10 text-xs hover:bg-yellow-400 hover:text-black">
+      ◀
+    </button>
+    <button onclick="nextHotelSlide()" class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 border border-yellow-500/20 text-yellow-400 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer z-10 text-xs hover:bg-yellow-400 hover:text-black">
+      ▶
+    </button>
+    <!-- Dot Indicators -->
+    <div class="absolute bottom-4 right-4 flex gap-1.5 z-10" id="hotelSliderDots">
+      <span onclick="setHotelSlide(0)" class="w-2 h-2 rounded-full bg-yellow-400 border border-yellow-400 shadow-[0_0_5px_#ffe500] cursor-pointer transition-all"></span>
+      <span onclick="setHotelSlide(1)" class="w-2 h-2 rounded-full bg-white/30 border border-transparent cursor-pointer transition-all"></span>
+      <span onclick="setHotelSlide(2)" class="w-2 h-2 rounded-full bg-white/30 border border-transparent cursor-pointer transition-all"></span>
+    </div>
+  </div>
+
+  <!-- Right Side: Hotel Details -->
+  <div class="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left">
+    <div class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border border-yellow-500/30 mb-4" style="background: rgba(255, 229, 0, 0.04)">
+      <span class="w-2 h-2 rounded-full bg-yellow-400 inline-block" style="box-shadow: 0 0 8px #ffe500; animation: pulseGlow 2s ease-in-out infinite;"></span>
+      <span class="font-rajdhani text-yellow-400 text-xs tracking-widest uppercase font-bold">SEDE OFICIAL · HOTEL Convenio</span>
+    </div>
+    <h3 class="font-orbitron font-black text-xl md:text-2xl text-white mb-2 tracking-wide">HOTEL MISIÓN CARLTON GUADALAJARA</h3>
+    <div class="flex gap-1 mb-4 text-yellow-400 text-sm">★★★★ <span class="text-xs text-gray-500 font-rajdhani font-semibold ml-2 tracking-wider">4 ESTRELLAS CONFORT</span></div>
+    <p class="font-space text-gray-300 text-xs leading-relaxed mb-5 max-w-md">
+      Ubicado en la Av. Niños Héroes de Guadalajara, el Hotel Misión Carlton ofrece una combinación ideal de comodidad, piscina al aire libre, centro de negocios y tarifas preferenciales exclusivas para la comunidad de TikEduca. Su ubicación privilegiada te sitúa cerca del centro histórico y del venue del festival.
+    </p>
+    <div class="font-space text-[10px] text-gray-500 mb-6 leading-relaxed">
+      📍 Av. Niños Héroes 125, Col. Centro, C.P. 44100, Guadalajara, Jalisco, México
+    </div>
+    
+    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-pink-500/20 w-full justify-center lg:justify-start lg:w-auto" style="background: rgba(255, 0, 127, 0.04);">
+      <span class="w-2 h-2 rounded-full bg-pink-500 inline-block" style="animation: pulseGlow 1.5s ease-in-out infinite;"></span>
+      <span class="font-rajdhani text-pink-400 text-[10px] tracking-widest font-bold">DISPONIBILIDAD LIMITADA · TARIFAS PREFERENCIALES</span>
+    </div>
+  </div>
+</div><div class="grid sm:grid-cols-3 gap-6 mb-10"><div
 class="room-card card-dark rounded-2xl p-6 pt-8 reveal-on-scroll reveal-slide-up delay-100"
 style="border: 1px solid rgba(0, 229, 255, 0.25)"
 onclick="selectRoom(this, 'sencilla', 'cyan')"
@@ -4062,6 +4112,72 @@ document.body.style.overflow = '';
 
     revealElements.forEach(el => revealObserver.observe(el));
   }
+})();
+
+// ── CONTROLADOR DE GALERÍA DE SLIDES DEL HOTEL ────────────────────────
+(function() {
+  let currentSlide = 0;
+  const totalSlides = 3;
+  let autoSlideInterval = null;
+
+  window.setHotelSlide = function(idx) {
+    currentSlide = idx;
+    updateSlider();
+    resetAutoSlide();
+  };
+
+  window.nextHotelSlide = function() {
+    currentSlide = (currentSlide + 1) % totalSlides;
+    updateSlider();
+    resetAutoSlide();
+  };
+
+  window.prevHotelSlide = function() {
+    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+    updateSlider();
+    resetAutoSlide();
+  };
+
+  function updateSlider() {
+    const slider = document.getElementById("hotelSlider");
+    const dotsContainer = document.getElementById("hotelSliderDots");
+    if (!slider) return;
+
+    // Shift using percentage
+    slider.style.transform = `translateX(-${(currentSlide * 100) / totalSlides}%)`;
+
+    // Update Dots UI
+    if (dotsContainer) {
+      const dots = dotsContainer.querySelectorAll("span");
+      dots.forEach((dot, idx) => {
+        if (idx === currentSlide) {
+          dot.className = "w-2 h-2 rounded-full bg-yellow-400 border border-yellow-400 shadow-[0_0_5px_#ffe500] cursor-pointer transition-all";
+        } else {
+          dot.className = "w-2 h-2 rounded-full bg-white/30 border border-transparent cursor-pointer transition-all";
+        }
+      });
+    }
+  }
+
+  function startAutoSlide() {
+    autoSlideInterval = setInterval(() => {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      updateSlider();
+    }, 6000);
+  }
+
+  // Intercept events to reset timer on manual controls
+  function resetAutoSlide() {
+    if (autoSlideInterval) {
+      clearInterval(autoSlideInterval);
+      startAutoSlide();
+    }
+  }
+
+  // Initialize auto-sliding
+  document.addEventListener("DOMContentLoaded", () => {
+    startAutoSlide();
+  });
 })();
 
 // ── SISTEMA DE SONIDO INTEGRADO (WEB AUDIO API) ───────────────────────
