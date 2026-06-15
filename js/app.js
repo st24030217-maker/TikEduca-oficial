@@ -289,7 +289,7 @@ window.openSpeakerModal = function(name, imgSrc, role, color) {
   document.getElementById('speakerZoomStatusDot').style.background = color;
   document.getElementById('speakerZoomStatusDot').style.boxShadow = `0 0 10px ${color}`;
   
-  const isFemale = name.includes('Gaby') || name.includes('Rocío') || name.includes('Azalhia') || name.includes('Edith') || name.includes('Miss') || name.includes('Profe');
+  const isFemale = name.includes('Gaby') || name.includes('Rocío') || name.includes('Azalhia') || name.includes('Edith') || name.includes('Miss') || (name.includes('Profe') && !name.includes('Angel') && !name.includes('Trujillo'));
   document.getElementById('speakerZoomStatusText').textContent = isFemale ? 'CONFIRMADA' : 'CONFIRMADO';
   document.getElementById('speakerZoomStatusText').style.color = color;
 
