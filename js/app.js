@@ -1235,67 +1235,6 @@ document.addEventListener("keydown", (e) => {
   };
 })();
 
-// ── 11. HOTEL IMAGES SLIDER ──────────────────────────────────────────────
-(function() {
-  let currentSlide = 0;
-  const totalSlides = 3;
-  let autoSlideInterval = null;
-
-  window.setHotelSlide = function(idx) {
-    currentSlide = idx;
-    updateSlider();
-    resetAutoSlide();
-  };
-
-  window.nextHotelSlide = function() {
-    currentSlide = (currentSlide + 1) % totalSlides;
-    updateSlider();
-    resetAutoSlide();
-  };
-
-  window.prevHotelSlide = function() {
-    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-    updateSlider();
-    resetAutoSlide();
-  };
-
-  function updateSlider() {
-    const slider = document.getElementById("hotelSlider");
-    const dotsContainer = document.getElementById("hotelSliderDots");
-    if (!slider) return;
-
-    slider.style.transform = `translateX(-${(currentSlide * 100) / totalSlides}%)`;
-
-    if (dotsContainer) {
-      const dots = dotsContainer.querySelectorAll("span");
-      dots.forEach((dot, idx) => {
-        if (idx === currentSlide) {
-          dot.className = "w-2 h-2 rounded-full bg-yellow-400 border border-yellow-400 shadow-[0_0_5px_#ffe500] cursor-pointer transition-all";
-        } else {
-          dot.className = "w-2 h-2 rounded-full bg-white/30 border border-transparent cursor-pointer transition-all";
-        }
-      });
-    }
-  }
-
-  function startAutoSlide() {
-    autoSlideInterval = setInterval(() => {
-      currentSlide = (currentSlide + 1) % totalSlides;
-      updateSlider();
-    }, 6000);
-  }
-
-  function resetAutoSlide() {
-    if (autoSlideInterval) {
-      clearInterval(autoSlideInterval);
-      startAutoSlide();
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    startAutoSlide();
-  });
-})();
 
 // ── 12. BACKGROUND PARTICLES CANVAS ─────────────────────────────────────
 (function() {
