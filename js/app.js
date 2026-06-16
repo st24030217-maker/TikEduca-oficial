@@ -709,8 +709,20 @@ window.submitPayment = async function() {
   const waUrl = `https://wa.me/${CONFIG.ORGANIZER_WA}?text=${encodeURIComponent(waMsg)}`;
   
   const nota = guardadoOk
-    ? `<p class="text-green-400 text-xs mb-3">✅ Registro guardado en Google Sheets y comprobante en Drive.</p>`
-    : `<p class="text-yellow-400 text-xs mb-3">⚠️ No se pudo guardar automáticamente. Envía el comprobante por WhatsApp.</p>`;
+    ? `<div class="p-3 mb-4 rounded-lg text-left" style="background: rgba(255, 229, 0, 0.1); border: 1px solid rgba(255, 229, 0, 0.3);">
+        <p class="text-yellow-400 text-xs font-bold mb-1 font-orbitron tracking-wider">📢 ¡ACCIÓN REQUERIDA PARA RECIBIR TU BOLETO!</p>
+        <p class="text-gray-300 text-[11px] leading-relaxed font-space">
+          Para garantizar la entrega inmediata de tu boleto (debido a intermitencias en los correos), 
+          <strong>es necesario enviar el comprobante haciendo clic en el botón de WhatsApp abajo</strong>.
+        </p>
+       </div>`
+    : `<div class="p-3 mb-4 rounded-lg text-left" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);">
+        <p class="text-red-400 text-xs font-bold mb-1 font-orbitron tracking-wider">⚠️ ERROR DE GUARDADO AUTOMÁTICO</p>
+        <p class="text-gray-300 text-[11px] leading-relaxed font-space">
+          No se pudo registrar tu pago automáticamente. 
+          <strong>Por favor, envía tu comprobante por WhatsApp</strong> para poder registrar tu boleto manualmente.
+        </p>
+       </div>`;
   
   document.getElementById("successPaymentDetails").innerHTML = `
     <div class="font-space text-gray-300 text-sm leading-relaxed text-left space-y-1.5 mb-4">
@@ -1034,8 +1046,20 @@ window.submitHotelPayment = async function() {
   const waUrl = `https://wa.me/${CONFIG.ORGANIZER_WA}?text=${encodeURIComponent(waMsg)}`;
   
   const nota = guardadoOk
-    ? `<p class="text-green-400 text-xs mb-3">✅ Reserva guardada en Google Sheets y comprobante en Drive.</p>`
-    : `<p class="text-yellow-400 text-xs mb-3">⚠️ No se pudo guardar automáticamente. Envía el comprobante por WhatsApp.</p>`;
+    ? `<div class="p-3 mb-4 rounded-lg text-left" style="background: rgba(255, 229, 0, 0.1); border: 1px solid rgba(255, 229, 0, 0.3);">
+        <p class="text-yellow-400 text-xs font-bold mb-1 font-orbitron tracking-wider">📢 ¡ACCIÓN REQUERIDA PARA CONFIRMAR TU RESERVA!</p>
+        <p class="text-gray-300 text-[11px] leading-relaxed font-space">
+          Para garantizar la entrega inmediata de tu confirmación (debido a intermitencias en los correos), 
+          <strong>es necesario enviar el comprobante haciendo clic en el botón de WhatsApp abajo</strong>.
+        </p>
+       </div>`
+    : `<div class="p-3 mb-4 rounded-lg text-left" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);">
+        <p class="text-red-400 text-xs font-bold mb-1 font-orbitron tracking-wider">⚠️ ERROR DE GUARDADO AUTOMÁTICO</p>
+        <p class="text-gray-300 text-[11px] leading-relaxed font-space">
+          No se pudo registrar tu pago automáticamente. 
+          <strong>Por favor, envía tu comprobante por WhatsApp</strong> para poder registrar tu reserva manualmente.
+        </p>
+       </div>`;
   
   document.getElementById("hotelViewPayment").classList.add("hidden");
   document.getElementById("hotelViewC").classList.remove("hidden");
