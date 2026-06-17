@@ -534,3 +534,251 @@ function sendHotelEmail(toEmail, guestName, roomType, nights, total, reservation
     htmlBody: htmlBody
   });
 }
+
+// ─── UTILERÍAS ADICIONALES PARA EL SPREADSHEET ─────────────────────────────────
+
+// Crear menú personalizado al abrir el documento
+function onOpen() {
+  var ui = SpreadsheetApp.getUi();
+  ui.createMenu('TikEduca 2.0')
+    .addItem('Generar IDs Faltantes (Sin enviar correo)', 'generateMissingIds')
+    .addItem('Generar IDs y Enviar Correos Faltantes', 'generateAndSendMissingTickets')
+    .addToUi();
+}
+
+// Función auxiliar: obtener valor de celda por el nombre de la cabecera
+function getRowValueByHeader(headers, rowValues, headerName) {
+  var lowerHeaderName = headerName.toLowerCase();
+  for (var i = 0; i < headers.length; i++) {
+    var h = headers[i].toString().toLowerCase().trim();
+    if (h === lowerHeaderName || h.replace(/[-_]/g, " ") === lowerHeaderName) {
+      return rowValues[i];
+    }
+  }
+  return "";
+}
+
+// 1. GENERAR IDs FALTANTES (SÓLO SPREADSHEET - SIN ENVIAR CORREOS)
+function generateMissingIds() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheets = ss.getSheets();
+  var summary = [];
+  
+  for (var i = 0; i < sheets.length; i++) {
+    var sheet = sheets[i];
+    var sheetName = sheet.getName();
+    
+    // Ignorar hojas vacías o Hoja 1 predeterminada sin datos
+    if (sheet.getLastRow() <= 1 || sheet.getLastColumn() === 0) {
+      continue;
+    }
+    
+    var lastRow = sheet.getLastRow();
+    var lastColumn = sheet.getLastColumn();
+    var headers = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
+    
+    var idColumnIndex = -1;
+    var idHeaderName = "";
+    var idPrefix = "";
+    
+    // Buscar si existe columna de ID
+    for (var j = 0; j < headers.length; j++) {
+      var header = headers[j].toString().toLowerCase().trim();
+      if (header.includes("id boleto") || header.includes("id ticket")) {
+        idColumnIndex = j + 1;
+        idHeaderName = headers[j];
+        idPrefix = "TKT-";
+        break;
+      } else if (header.includes("id reservacion") || header.includes("id reserva")) {
+        idColumnIndex = j + 1;
+        idHeaderName = headers[j];
+        idPrefix = "HTL-";
+        break;
+      } else if (header.includes("id pre-registro") || header.includes("id preregistro")) {
+        idColumnIndex = j + 1;
+        idHeaderName = headers[j];
+        idPrefix = "PRE-";
+        break;
+      }
+    }
+    
+    // Si no se encontró columna de ID, determinar según el nombre de la hoja
+    if (idColumnIndex === -1) {
+      if (sheetName.toLowerCase().includes("pre")) {
+        idHeaderName = "ID Pre-Registro";
+        idPrefix = "PRE-";
+      } else if (sheetName.toLowerCase().includes("hotel") || sheetName.toLowerCase().includes("habitacion")) {
+        idHeaderName = "ID Reservacion";
+        idPrefix = "HTL-";
+      } else {
+        idHeaderName = "ID Boleto";
+        idPrefix = "TKT-";
+      }
+      
+      // Agregar la nueva columna de ID al final
+      sheet.getRange(1, lastColumn + 1).setValue(idHeaderName);
+      idColumnIndex = lastColumn + 1;
+      lastColumn = lastColumn + 1;
+    }
+    
+    // Cargar la columna de IDs para procesar
+    var idRange = sheet.getRange(2, idColumnIndex, lastRow - 1, 1);
+    var idValues = idRange.getValues();
+    var count = 0;
+    
+    for (var r = 0; r < idValues.length; r++) {
+      if (!idValues[r][0] || idValues[r][0].toString().trim() === "") {
+        idValues[r][0] = idPrefix + Math.floor(100000 + Math.random() * 900000);
+        count++;
+      }
+    }
+    
+    if (count > 0) {
+      idRange.setValues(idValues);
+    }
+    
+    summary.push("Hoja '" + sheetName + "': " + count + " IDs generados (" + idPrefix + "XXXXXX)");
+  }
+  
+  var ui = SpreadsheetApp.getUi();
+  ui.alert("Proceso Completado", "Se han generado los IDs faltantes con éxito:\n\n" + summary.join("\n"), ui.ButtonSet.OK);
+}
+
+// 2. GENERAR IDs Y ADEMÁS ENVIAR CORREOS DE CONFIRMACIÓN (PARA REGISTROS PENDIENTES)
+function generateAndSendMissingTickets() {
+  var ui = SpreadsheetApp.getUi();
+  var confirm = ui.alert(
+    "Enviar Correos Históricos",
+    "Esta función buscará registros en las hojas de Boletos ('PagosBoletos', 'Maestros Fest', 'TikEduca') y Hotel ('Habitaciones', 'ReservacionesHotel') que no tengan ID.\n\n" +
+    "Generará su código de boleto/reserva y les enviará el correo electrónico de confirmación correspondiente.\n\n" +
+    "¿Deseas continuar?",
+    ui.ButtonSet.YES_NO
+  );
+  
+  if (confirm !== ui.ButtonSet.YES) {
+    return;
+  }
+  
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var summary = [];
+  
+  // Procesar Boletos
+  var ticketSheets = ["PagosBoletos", "Maestros Fest", "TikEduca"];
+  for (var s = 0; s < ticketSheets.length; s++) {
+    var sheet = ss.getSheetByName(ticketSheets[s]);
+    if (!sheet || sheet.getLastRow() <= 1 || sheet.getLastColumn() === 0) continue;
+    
+    var lastRow = sheet.getLastRow();
+    var lastColumn = sheet.getLastColumn();
+    var dataRange = sheet.getRange(1, 1, lastRow, lastColumn);
+    var values = dataRange.getValues();
+    var headers = values[0];
+    
+    var idColIdx = -1;
+    for (var j = 0; j < headers.length; j++) {
+      var h = headers[j].toString().toLowerCase().trim();
+      if (h.includes("id boleto") || h.includes("id ticket")) {
+        idColIdx = j;
+        break;
+      }
+    }
+    
+    if (idColIdx === -1) {
+      sheet.getRange(1, lastColumn + 1).setValue("ID Boleto");
+      idColIdx = lastColumn;
+      lastColumn++;
+      dataRange = sheet.getRange(1, 1, lastRow, lastColumn);
+      values = dataRange.getValues();
+      headers = values[0];
+    }
+    
+    var count = 0;
+    for (var r = 1; r < values.length; r++) {
+      var row = values[r];
+      var currentId = row[idColIdx];
+      
+      if (!currentId || currentId.toString().trim() === "") {
+        var email = getRowValueByHeader(headers, row, "Email") || getRowValueByHeader(headers, row, "Correo");
+        var nombre = getRowValueByHeader(headers, row, "Nombre") || getRowValueByHeader(headers, row, "Asistente");
+        var boleto = getRowValueByHeader(headers, row, "Boleto") || getRowValueByHeader(headers, row, "Tipo de Boleto");
+        var referencia = getRowValueByHeader(headers, row, "Referencia") || "Histórico";
+        
+        var newId = "TKT-" + Math.floor(100000 + Math.random() * 900000);
+        sheet.getRange(r + 1, idColIdx + 1).setValue(newId);
+        
+        if (email) {
+          try {
+            sendTicketEmail(email, nombre, boleto, newId, referencia);
+            Utilities.sleep(1000); // 1 segundo entre envíos
+          } catch(e) {}
+        }
+        count++;
+      }
+    }
+    summary.push("Boletos ('" + ticketSheets[s] + "'): " + count + " procesados y enviados");
+  }
+  
+  // Procesar Hotel
+  var hotelSheets = ["Habitaciones", "ReservacionesHotel"];
+  for (var s = 0; s < hotelSheets.length; s++) {
+    var sheet = ss.getSheetByName(hotelSheets[s]);
+    if (!sheet || sheet.getLastRow() <= 1 || sheet.getLastColumn() === 0) continue;
+    
+    var lastRow = sheet.getLastRow();
+    var lastColumn = sheet.getLastColumn();
+    var dataRange = sheet.getRange(1, 1, lastRow, lastColumn);
+    var values = dataRange.getValues();
+    var headers = values[0];
+    
+    var idColIdx = -1;
+    for (var j = 0; j < headers.length; j++) {
+      var h = headers[j].toString().toLowerCase().trim();
+      if (h.includes("id reservacion") || h.includes("id reserva")) {
+        idColIdx = j;
+        break;
+      }
+    }
+    
+    if (idColIdx === -1) {
+      sheet.getRange(1, lastColumn + 1).setValue("ID Reservacion");
+      idColIdx = lastColumn;
+      lastColumn++;
+      dataRange = sheet.getRange(1, 1, lastRow, lastColumn);
+      values = dataRange.getValues();
+      headers = values[0];
+    }
+    
+    var count = 0;
+    for (var r = 1; r < values.length; r++) {
+      var row = values[r];
+      var currentId = row[idColIdx];
+      
+      if (!currentId || currentId.toString().trim() === "") {
+        var email = getRowValueByHeader(headers, row, "Email") || getRowValueByHeader(headers, row, "Correo");
+        var nombre = getRowValueByHeader(headers, row, "Nombre") || "";
+        var apellidos = getRowValueByHeader(headers, row, "Apellidos") || "";
+        var habitacion = getRowValueByHeader(headers, row, "Habitación") || getRowValueByHeader(headers, row, "Cuarto");
+        var noches = getRowValueByHeader(headers, row, "Noches") || "1";
+        var total = getRowValueByHeader(headers, row, "Total") || "$0";
+        var checkin = getRowValueByHeader(headers, row, "Check-In") || "Por definir";
+        var checkout = getRowValueByHeader(headers, row, "Check-Out") || "Por definir";
+        
+        var newId = "HTL-" + Math.floor(100000 + Math.random() * 900000);
+        sheet.getRange(r + 1, idColIdx + 1).setValue(newId);
+        
+        if (email) {
+          try {
+            var fullName = (nombre + " " + apellidos).trim();
+            sendHotelEmail(email, fullName, habitacion, noches, total, newId, checkin, checkout);
+            Utilities.sleep(1000);
+          } catch(e) {}
+        }
+        count++;
+      }
+    }
+    summary.push("Hotel ('" + hotelSheets[s] + "'): " + count + " procesados y enviados");
+  }
+  
+  ui.alert("Proceso de Envío Completado", "Se han procesado y enviado los correos de confirmación:\n\n" + summary.join("\n"), ui.ButtonSet.OK);
+}
+
