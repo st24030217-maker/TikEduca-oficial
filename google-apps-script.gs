@@ -85,7 +85,12 @@ function saveTikeduca(ss, params) {
 function saveFest(ss, params) {
   var sheet = ss.getSheetByName("PagosBoletos") || ss.insertSheet("PagosBoletos");
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow(["Fecha", "Nombre", "Email", "WhatsApp", "Escuela", "Ciudad", "Boleto", "Titular Transferencia", "Referencia", "Fecha Pago", "Enlace Comprobante", "ID Boleto"]);
+    sheet.appendRow(["Fecha", "Nombre", "Email", "WhatsApp", "Escuela", "Ciudad", "Boleto", "Titular Transferencia", "Referencia", "Fecha Pago", "Enlace Comprobante", "ID Boleto", "Estado Correo"]);
+  }
+  
+  // Asegurar cabecera de "Estado Correo" en la columna 13
+  if (sheet.getRange(1, 13).getValue() === "") {
+    sheet.getRange(1, 13).setValue("Estado Correo");
   }
   
   var fileUrl = "";
@@ -112,16 +117,33 @@ function saveFest(ss, params) {
   ]);
   
   // Enviar el boleto por correo electrónico si hay dirección válida
+  var emailStatus = "No enviado";
   if (params.email) {
-    sendTicketEmail(params.email, params.nombre, params.boleto, ticketId, params.referencia);
+    try {
+      sendTicketEmail(params.email, params.nombre, params.boleto, ticketId, params.referencia);
+      emailStatus = "Enviado con éxito";
+    } catch (e) {
+      emailStatus = "Error: " + e.toString();
+    }
+  } else {
+    emailStatus = "Sin email proporcionado";
   }
+  
+  // Escribir el estado en la columna 13 (M) de la fila recién creada
+  var lastRow = sheet.getLastRow();
+  sheet.getRange(lastRow, 13).setValue(emailStatus);
 }
 
 // 3. GUARDAR RESERVAS DE HOTEL Y ENVIAR CONFIRMACIÓN AUTOMÁTICA
 function saveHotel(ss, params) {
   var sheet = ss.getSheetByName("ReservacionesHotel") || ss.insertSheet("ReservacionesHotel");
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow(["Fecha", "Nombre", "Apellidos", "Email", "Teléfono", "Habitación", "Noches", "Total", "Check-In", "Check-Out", "Notas", "Titular Transferencia", "Referencia", "Fecha Pago", "Enlace Comprobante", "ID Reservacion"]);
+    sheet.appendRow(["Fecha", "Nombre", "Apellidos", "Email", "Teléfono", "Habitación", "Noches", "Total", "Check-In", "Check-Out", "Notas", "Titular Transferencia", "Referencia", "Fecha Pago", "Enlace Comprobante", "ID Reservacion", "Estado Correo"]);
+  }
+  
+  // Asegurar cabecera en columna 17 (Q)
+  if (sheet.getRange(1, 17).getValue() === "") {
+    sheet.getRange(1, 17).setValue("Estado Correo");
   }
   
   var fileUrl = "";
@@ -152,10 +174,22 @@ function saveHotel(ss, params) {
   ]);
   
   // Enviar la confirmación del hotel por correo electrónico
+  var emailStatus = "No enviado";
   if (params.email) {
-    var fullName = (params.nombre || "") + " " + (params.apellidos || "");
-    sendHotelEmail(params.email, fullName.trim(), params.habitacion, params.noches, params.total, reservationId, params.checkin, params.checkout);
+    try {
+      var fullName = (params.nombre || "") + " " + (params.apellidos || "");
+      sendHotelEmail(params.email, fullName.trim(), params.habitacion, params.noches, params.total, reservationId, params.checkin, params.checkout);
+      emailStatus = "Enviado con éxito";
+    } catch (e) {
+      emailStatus = "Error: " + e.toString();
+    }
+  } else {
+    emailStatus = "Sin email proporcionado";
   }
+  
+  // Escribir el estado en la columna 17 (Q) de la fila recién creada
+  var lastRow = sheet.getLastRow();
+  sheet.getRange(lastRow, 17).setValue(emailStatus);
 }
 
 // FUNCIÓN AUXILIAR: SUBIR ARCHIVO A GOOGLE DRIVE
@@ -340,9 +374,8 @@ function sendTicketEmail(toEmail, attendeeName, ticketType, ticketId, reference)
     </html>
   `;
   
-  MailApp.sendEmail({
-    to: toEmail,
-    subject: subject,
+  GmailApp.sendEmail(toEmail, subject, "", {
+    name: "TikEduca",
     htmlBody: htmlBody
   });
 }
@@ -528,9 +561,8 @@ function sendHotelEmail(toEmail, guestName, roomType, nights, total, reservation
     </html>
   `;
   
-  MailApp.sendEmail({
-    to: toEmail,
-    subject: subject,
+  GmailApp.sendEmail(toEmail, subject, "", {
+    name: "TikEduca",
     htmlBody: htmlBody
   });
 }
@@ -543,7 +575,20 @@ function onOpen() {
   ui.createMenu('TikEduca 2.0')
     .addItem('Generar IDs Faltantes (Sin enviar correo)', 'generateMissingIds')
     .addItem('Generar IDs y Enviar Correos Faltantes', 'generateAndSendMissingTickets')
+    .addSeparator()
+    .addItem('Ver Cuota de Correos Restante', 'checkEmailQuota')
     .addToUi();
+}
+
+function checkEmailQuota() {
+  var limit = MailApp.getRemainingDailyEmailsLimit();
+  var ui = SpreadsheetApp.getUi();
+  ui.alert(
+    "Cuota de Correos Restante",
+    "Puedes enviar aproximadamente " + limit + " correos más el día de hoy.\n\n" +
+    "Nota: Las cuentas de Gmail gratuitas tienen un límite diario de 100 correos, mientras que las cuentas de Google Workspace (corporativas) tienen un límite de 1500 correos por día. Si alcanzas este límite, Google suspenderá el envío de correos hasta el día siguiente.",
+    ui.ButtonSet.OK
+  );
 }
 
 // Función auxiliar: obtener valor de celda por el nombre de la cabecera
@@ -692,6 +737,24 @@ function generateAndSendMissingTickets() {
       headers = values[0];
     }
     
+    // Buscar o crear columna de Estado Correo
+    var emailStatusColIdx = -1;
+    for (var j = 0; j < headers.length; j++) {
+      var h = headers[j].toString().toLowerCase().trim();
+      if (h.includes("estado correo") || h.includes("estado email")) {
+        emailStatusColIdx = j;
+        break;
+      }
+    }
+    if (emailStatusColIdx === -1) {
+      sheet.getRange(1, lastColumn + 1).setValue("Estado Correo");
+      emailStatusColIdx = lastColumn;
+      lastColumn++;
+      dataRange = sheet.getRange(1, 1, lastRow, lastColumn);
+      values = dataRange.getValues();
+      headers = values[0];
+    }
+    
     var count = 0;
     for (var r = 1; r < values.length; r++) {
       var row = values[r];
@@ -706,12 +769,19 @@ function generateAndSendMissingTickets() {
         var newId = "TKT-" + Math.floor(100000 + Math.random() * 900000);
         sheet.getRange(r + 1, idColIdx + 1).setValue(newId);
         
+        var emailStatus = "No enviado";
         if (email) {
           try {
             sendTicketEmail(email, nombre, boleto, newId, referencia);
+            emailStatus = "Enviado con éxito";
             Utilities.sleep(1000); // 1 segundo entre envíos
-          } catch(e) {}
+          } catch(e) {
+            emailStatus = "Error: " + e.toString();
+          }
+        } else {
+          emailStatus = "Sin email proporcionado";
         }
+        sheet.getRange(r + 1, emailStatusColIdx + 1).setValue(emailStatus);
         count++;
       }
     }
@@ -748,6 +818,24 @@ function generateAndSendMissingTickets() {
       headers = values[0];
     }
     
+    // Buscar o crear columna de Estado Correo
+    var emailStatusColIdx = -1;
+    for (var j = 0; j < headers.length; j++) {
+      var h = headers[j].toString().toLowerCase().trim();
+      if (h.includes("estado correo") || h.includes("estado email")) {
+        emailStatusColIdx = j;
+        break;
+      }
+    }
+    if (emailStatusColIdx === -1) {
+      sheet.getRange(1, lastColumn + 1).setValue("Estado Correo");
+      emailStatusColIdx = lastColumn;
+      lastColumn++;
+      dataRange = sheet.getRange(1, 1, lastRow, lastColumn);
+      values = dataRange.getValues();
+      headers = values[0];
+    }
+    
     var count = 0;
     for (var r = 1; r < values.length; r++) {
       var row = values[r];
@@ -766,13 +854,20 @@ function generateAndSendMissingTickets() {
         var newId = "HTL-" + Math.floor(100000 + Math.random() * 900000);
         sheet.getRange(r + 1, idColIdx + 1).setValue(newId);
         
+        var emailStatus = "No enviado";
         if (email) {
           try {
             var fullName = (nombre + " " + apellidos).trim();
             sendHotelEmail(email, fullName, habitacion, noches, total, newId, checkin, checkout);
+            emailStatus = "Enviado con éxito";
             Utilities.sleep(1000);
-          } catch(e) {}
+          } catch(e) {
+            emailStatus = "Error: " + e.toString();
+          }
+        } else {
+          emailStatus = "Sin email proporcionado";
         }
+        sheet.getRange(r + 1, emailStatusColIdx + 1).setValue(emailStatus);
         count++;
       }
     }
