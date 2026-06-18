@@ -431,19 +431,34 @@ window.submitTikeduca = async function() {
   if (!nombre || !email || !whatsapp || !nivel) {
     const err = document.getElementById("formError");
     if (err) {
+      err.textContent = "⚠ Por favor completa todos los campos obligatorios";
       err.classList.remove("hidden");
       setTimeout(() => err.classList.add("hidden"), 3500);
     }
     return;
   }
 
-  userData = { ...userData, nombre, email, whatsapp, nivel, ticket: selectedRegTicket, instagram, tiktok, fuente };
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    const err = document.getElementById("formError");
+    if (err) {
+      err.textContent = "⚠ Por favor ingresa un correo electrónico válido (ej. nombre@correo.com)";
+      err.classList.remove("hidden");
+      setTimeout(() => {
+        err.classList.add("hidden");
+        setTimeout(() => { err.textContent = "⚠ Por favor completa todos los campos obligatorios"; }, 300);
+      }, 3500);
+    }
+    return;
+  }
+
+  userData = { ...userData, nombre, email: email.toLowerCase(), whatsapp, nivel, ticket: selectedRegTicket, instagram, tiktok, fuente };
 
   try {
     const params = new URLSearchParams({ 
       tipo: "tikeduca", 
       nombre, 
-      email, 
+      email: email.toLowerCase(), 
       whatsapp, 
       nivel, 
       ticket: selectedRegTicket, 
@@ -932,15 +947,30 @@ window.submitHotel = function() {
   if (!nombre || !apellidos || !email || !tel) {
     const err = document.getElementById("hotelErrorB");
     if (err) {
+      err.textContent = "⚠ Completa todos los campos requeridos";
       err.classList.remove("hidden");
       setTimeout(() => err.classList.add("hidden"), 3500);
     }
     return;
   }
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    const err = document.getElementById("hotelErrorB");
+    if (err) {
+      err.textContent = "⚠ Por favor ingresa un correo electrónico válido (ej. nombre@correo.com)";
+      err.classList.remove("hidden");
+      setTimeout(() => {
+        err.classList.add("hidden");
+        setTimeout(() => { err.textContent = "⚠ Completa todos los campos requeridos"; }, 300);
+      }, 3500);
+    }
+    return;
+  }
+
   hotelState.nombre = nombre;
   hotelState.apellidos = apellidos;
-  hotelState.email = email;
+  hotelState.email = email.toLowerCase();
   hotelState.tel = tel;
   hotelState.notas = document.getElementById("hotel_notas").value.trim();
   
