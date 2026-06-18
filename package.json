@@ -1,0 +1,12 @@
+{
+  "name": "tikeduca-oficial",
+  "version": "2.0.0",
+  "description": "TikEduca 2.0 Web Platform",
+  "main": "index.html",
+  "scripts": {
+    "build:css": "npx tailwindcss -i ./css/tailwind-input.css -o ./css/tailwind.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}
