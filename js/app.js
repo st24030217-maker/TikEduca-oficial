@@ -454,6 +454,13 @@ window.submitTikeduca = async function() {
 
   userData = { ...userData, nombre, email: email.toLowerCase(), whatsapp, nivel, ticket: selectedRegTicket, instagram, tiktok, fuente };
 
+  const btn = document.querySelector("button[onclick='submitTikeduca()']");
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = "⏳ RESERVANDO...";
+  }
+
+  let guardadoOk = false;
   try {
     const params = new URLSearchParams({ 
       tipo: "tikeduca", 
@@ -467,35 +474,59 @@ window.submitTikeduca = async function() {
       tiktok, 
       fuente 
     });
-    fetch(CONFIG.APPS_SCRIPT_URL, {
+    const response = await fetch(CONFIG.APPS_SCRIPT_URL, {
       method: "POST", 
-      mode: "no-cors",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: params.toString()
     });
-  } catch (_) {}
-
-  document.getElementById("formTikeduca").classList.add("hidden");
-  document.getElementById("successTikeduca").classList.remove("hidden");
-  
-  if (typeof triggerSuccessSound === "function") triggerSuccessSound();
-  
-  document.getElementById("step1dot").classList.remove("active");
-  document.getElementById("step1dot").classList.add("done");
-  document.getElementById("stepline1").classList.add("done");
-  document.getElementById("step2dot").classList.add("active");
-
-  setTimeout(() => {
-    document.getElementById("nombreUsuario").textContent = nombre.split(" ")[0] + "!";
-    const ticketMap = { congreso: "congreso", maestrofest: "maestro_fest", combo: "combo" };
-    const modalTicket = ticketMap[selectedRegTicket];
-    if (modalTicket) {
-      const btn = document.querySelector(`#ticketSelector button[onclick*="${modalTicket}"]`);
-      if (btn) window.selectTicket(btn, modalTicket);
+    if (response.ok) {
+      const result = await response.json();
+      if (result && result.status === "success") {
+        guardadoOk = true;
+      }
     }
-    document.getElementById("modalFest").classList.add("active");
-    document.body.style.overflow = "hidden";
-  }, 1400);
+  } catch (err) {
+    console.error("Error al guardar pre-registro:", err);
+  }
+
+  if (btn) {
+    btn.disabled = false;
+    btn.innerHTML = "◈ RESERVAR MI LUGAR AHORA";
+  }
+
+  if (guardadoOk) {
+    document.getElementById("formTikeduca").classList.add("hidden");
+    document.getElementById("successTikeduca").classList.remove("hidden");
+    
+    if (typeof triggerSuccessSound === "function") triggerSuccessSound();
+    
+    document.getElementById("step1dot").classList.remove("active");
+    document.getElementById("step1dot").classList.add("done");
+    document.getElementById("stepline1").classList.add("done");
+    document.getElementById("step2dot").classList.add("active");
+
+    setTimeout(() => {
+      document.getElementById("nombreUsuario").textContent = nombre.split(" ")[0] + "!";
+      const ticketMap = { congreso: "congreso", maestrofest: "maestro_fest", combo: "combo" };
+      const modalTicket = ticketMap[selectedRegTicket];
+      if (modalTicket) {
+        const btnSelector = document.querySelector(`#ticketSelector button[onclick*="${modalTicket}"]`);
+        if (btnSelector) window.selectTicket(btnSelector, modalTicket);
+      }
+      document.getElementById("modalFest").classList.add("active");
+      document.body.style.overflow = "hidden";
+    }, 1400);
+  } else {
+    const err = document.getElementById("formError");
+    if (err) {
+      err.textContent = "⚠️ Error de conexión con el servidor. Por favor, reintenta en unos momentos.";
+      err.classList.remove("hidden");
+      setTimeout(() => {
+        err.classList.add("hidden");
+        setTimeout(() => { err.textContent = "⚠ Por favor completa todos los campos obligatorios"; }, 300);
+      }, 5000);
+    }
+  }
 };
 
 window.openFestModal = function(e) {
@@ -702,14 +733,20 @@ window.submitPayment = async function() {
       comprobanteMime: file.type || "image/jpeg"
     });
     
-    await fetch(CONFIG.APPS_SCRIPT_URL, {
+    const response = await fetch(CONFIG.APPS_SCRIPT_URL, {
       method: "POST", 
-      mode: "no-cors",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: params.toString()
     });
-    guardadoOk = true;
-  } catch (_) {}
+    if (response.ok) {
+      const result = await response.json();
+      if (result && result.status === "success") {
+        guardadoOk = true;
+      }
+    }
+  } catch (err) {
+    console.error("Error al enviar pago de boleto:", err);
+  }
 
   document.getElementById("viewFestPayment").classList.add("hidden");
   document.getElementById("viewFestSuccess").classList.remove("hidden");
@@ -1059,14 +1096,20 @@ window.submitHotelPayment = async function() {
       comprobanteMime: file.type || "image/jpeg"
     });
     
-    await fetch(CONFIG.APPS_SCRIPT_URL, {
+    const response = await fetch(CONFIG.APPS_SCRIPT_URL, {
       method: "POST", 
-      mode: "no-cors",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: params.toString()
     });
-    guardadoOk = true;
-  } catch (_) {}
+    if (response.ok) {
+      const result = await response.json();
+      if (result && result.status === "success") {
+        guardadoOk = true;
+      }
+    }
+  } catch (err) {
+    console.error("Error al enviar pago de hotel:", err);
+  }
 
   document.getElementById("conf_tipo").textContent = ROOM_LABELS[hotelState.tipo];
   document.getElementById("conf_noches").textContent = hotelState.noches + " noche(s)";
