@@ -4,9 +4,11 @@
   "description": "TikEduca 2.0 Web Platform",
   "main": "index.html",
   "scripts": {
+    "dev": "lite-server",
     "build:css": "npx tailwindcss -i ./css/tailwind-input.css -o ./css/tailwind.css --minify"
   },
   "devDependencies": {
+    "lite-server": "^2.6.1",
     "tailwindcss": "^3.4.1"
   }
 }
