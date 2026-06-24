@@ -1179,7 +1179,7 @@ window.openMobileMenu = function() {
   const sheet = document.getElementById('mobileMenuSheet');
   if (overlay) overlay.classList.add('open');
   if (sheet) sheet.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.body.classList.add('menu-open-3d');
 };
 
 window.closeMobileMenu = function() {
@@ -1187,7 +1187,7 @@ window.closeMobileMenu = function() {
   const sheet = document.getElementById('mobileMenuSheet');
   if (overlay) overlay.classList.remove('open');
   if (sheet) sheet.classList.remove('open');
-  document.body.style.overflow = '';
+  document.body.classList.remove('menu-open-3d');
 };
 
 // Escape Key Closes Modals
