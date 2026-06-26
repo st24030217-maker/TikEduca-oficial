@@ -747,7 +747,8 @@ filter: blur(60px);
   <div class="max-w-lg mx-auto mt-16">
     <div class="flex items-center gap-2 mb-8 px-2"><div class="step-dot active" id="step1dot"></div><div class="step-line" id="stepline1"></div><div class="step-dot" id="step2dot"></div><div class="step-line" id="stepline2"></div><div class="step-dot" id="step3dot"></div><div class="flex-1 flex items-center"><span
 class="font-rajdhani text-gray-500 text-xs tracking-widest ml-2"
->PASO 1 DE 2</span></div></div><div
+id="stepLabelText"
+>PASO 1 DE 3: REGISTRO</span></div></div><div
 id="formTikeduca"
 class="card-dark border-neon-cyan rounded-2xl p-8 relative corner-tl corner-br"
 ><div class="mb-6"><div
@@ -877,9 +878,11 @@ stroke-linejoin="round"
 class="check-path"
 /></svg></div><h3 class="font-orbitron font-bold text-xl neon-cyan mb-2">
 ¡BIENVENIDO/A!
-</h3><p class="font-space text-gray-300 text-sm">
-Cargando tu sorpresa...
-</p></div></div></div></section><section id="hospedaje" class="relative py-20 px-4 overflow-hidden"><div
+</h3><p class="font-space text-gray-300 text-sm mb-4">
+¡Tu pre-registro se guardó con éxito! Estamos cargando el paso para adquirir tu boleto. Si no se abre automáticamente o lo cerraste, haz clic en el botón de abajo:
+</p><button onclick="openFestModal(event)" class="btn-primary py-3 px-6 rounded-xl text-xs font-bold font-orbitron tracking-wider cursor-pointer" style="box-shadow: 0 0 15px rgba(255,0,127,0.4);">
+ADQUIRIR MI BOLETO ➔
+</button></div></div></div></section><section id="hospedaje" class="relative py-20 px-4 overflow-hidden"><div
 class="absolute top-0 left-1/4 w-80 h-80 opacity-8 pointer-events-none rounded-full"
 style="
 background: radial-gradient(circle, #9b00ff, transparent);

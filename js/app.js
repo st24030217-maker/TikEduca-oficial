@@ -504,6 +504,8 @@ window.submitTikeduca = async function() {
     document.getElementById("step1dot").classList.add("done");
     document.getElementById("stepline1").classList.add("done");
     document.getElementById("step2dot").classList.add("active");
+    const stepLabel = document.getElementById("stepLabelText");
+    if (stepLabel) stepLabel.textContent = "PASO 2 DE 3: SELECCIONAR BOLETO";
 
     setTimeout(() => {
       document.getElementById("nombreUsuario").textContent = nombre.split(" ")[0] + "!";
@@ -544,10 +546,20 @@ window.closeModal = function() {
   if (modal) modal.classList.remove("active");
   document.body.style.overflow = "";
   if (userData.nombre) {
-    document.getElementById("step2dot").classList.remove("active");
-    document.getElementById("step2dot").classList.add("done");
-    document.getElementById("stepline2").classList.add("done");
-    document.getElementById("step3dot").classList.add("active");
+    const stepLabel = document.getElementById("stepLabelText");
+    if (userData.ticket) {
+      document.getElementById("step2dot").classList.remove("active");
+      document.getElementById("step2dot").classList.add("done");
+      document.getElementById("stepline2").classList.add("done");
+      document.getElementById("step3dot").classList.remove("done");
+      document.getElementById("step3dot").classList.add("active");
+      if (stepLabel) stepLabel.textContent = "PASO 3 DE 3: COMPLETAR PAGO";
+    } else {
+      document.getElementById("step2dot").classList.remove("done");
+      document.getElementById("step2dot").classList.add("active");
+      document.getElementById("step3dot").classList.remove("active");
+      if (stepLabel) stepLabel.textContent = "PASO 2 DE 3: SELECCIONAR BOLETO";
+    }
   }
 };
 
@@ -664,8 +676,21 @@ window.submitFest = function() {
   document.getElementById("viewFestPayment").style.animation = "fadeIn 0.5s ease-out";
   document.getElementById("pay_nombre_transfer").value = userData.nombre || "";
   
+  const step2 = document.getElementById("step2dot");
+  if (step2) {
+    step2.classList.remove("active");
+    step2.classList.add("done");
+  }
+  const stepline2 = document.getElementById("stepline2");
+  if (stepline2) stepline2.classList.add("done");
+  
   const step3 = document.getElementById("step3dot");
-  if (step3) step3.classList.add("active");
+  if (step3) {
+    step3.classList.remove("done");
+    step3.classList.add("active");
+  }
+  const stepLabel = document.getElementById("stepLabelText");
+  if (stepLabel) stepLabel.textContent = "PASO 3 DE 3: SUBIR COMPROBANTE";
 };
 
 window.copyAccount = function() {
@@ -756,6 +781,8 @@ window.submitPayment = async function() {
   document.getElementById("viewFestSuccess").style.animation = "fadeIn 0.5s ease-out";
   document.getElementById("step3dot").classList.remove("active");
   document.getElementById("step3dot").classList.add("done");
+  const stepLabel = document.getElementById("stepLabelText");
+  if (stepLabel) stepLabel.textContent = "¡REGISTRO COMPLETADO!";
 
   const waMsg = `Hola, acabo de registrar mi pago por transferencia para el Maestros Fest 2.0.\nNombre de registro: ${userData.nombre}\nWhatsApp: ${userData.whatsapp}\nBoleto Seleccionado: ${ticketNames[ticket]}\nTitular de transferencia: ${nombre}\nReferencia: ${referencia}\nFecha de pago: ${fecha}\nComprobante adjunto: [${file.name}]`;
   const waUrl = `https://wa.me/${CONFIG.ORGANIZER_WA}?text=${encodeURIComponent(waMsg)}`;
