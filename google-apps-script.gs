@@ -14,13 +14,6 @@
 const DRIVE_FOLDER_ID = ""; // Opcional: ID de carpeta de Drive para guardar recibos. Si se deja vacío, se guardarán en la raíz.
 
 function doPost(e) {
-  // Configuración de CORS para peticiones desde el frontend
-  var headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type"
-  };
-  
   try {
     var params = e.parameter;
     var tipo = params.tipo;
@@ -38,27 +31,19 @@ function doPost(e) {
     
     var response = { status: "success", message: "Registro guardado correctamente" };
     return ContentService.createTextOutput(JSON.stringify(response))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeaders(headers);
+      .setMimeType(ContentService.MimeType.JSON);
       
   } catch (error) {
     var errorResponse = { status: "error", message: error.toString() };
     return ContentService.createTextOutput(JSON.stringify(errorResponse))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeaders(headers);
+      .setMimeType(ContentService.MimeType.JSON);
   }
 }
 
 // Permitir peticiones de tipo OPTIONS (CORS preflight)
 function doOptions(e) {
-  var headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type"
-  };
   return ContentService.createTextOutput("")
-    .setMimeType(ContentService.MimeType.TEXT)
-    .setHeaders(headers);
+    .setMimeType(ContentService.MimeType.TEXT);
 }
 
 // 1. GUARDAR PRE-REGISTROS (TIKEDUCA)
