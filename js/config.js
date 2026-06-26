@@ -1,7 +1,7 @@
 // TikEduca 2.0 Global Configuration
 const CONFIG = {
   // Apps Script Endpoint URL
-  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz01JadcCvE3z71_Uhqc3oi_HPqRrI6uRNLrLZVr9PmosGqVuYxyVz17Uz9Ud7Ry5DOTg/exec",
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzJV_nujTckBLBqg4i8zZnVZkdDsfcA3XzAW_4rfFR62gfrCbnFfuosyxCKmjCyGbDwRQ/exec",
 
   // WhatsApp Organizer Contact Number
   ORGANIZER_WA: "5213349004784",
