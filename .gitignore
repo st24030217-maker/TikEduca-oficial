@@ -1,3 +1,4 @@
+# node_modules and temp
 node_modules/
 .DS_Store
 dist/
@@ -7,5 +8,4 @@ yarn-error.log*
 .eslintcache
 .parcel-cache
 .cache
-tailwind.css
 _temp_whatsapp/
