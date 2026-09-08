@@ -1,4 +1,6 @@
 // TikEduca 2.0 Global Configuration
+// ⚠️ El APPS_SCRIPT_URL es un endpoint público (configurado como "Anyone" en Google Apps Script)
+// No requiere secreto, pero protege contra uso no autorizado si lo deseas.
 const CONFIG = {
   // Apps Script Endpoint URL
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzJV_nujTckBLBqg4i8zZnVZkdDsfcA3XzAW_4rfFR62gfrCbnFfuosyxCKmjCyGbDwRQ/exec",

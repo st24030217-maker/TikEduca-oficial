@@ -3,15 +3,21 @@
 // 1. Ve a tu Google Sheet (Hoja de cálculo) de registros.
 // 2. Ve al menú superior: Extensiones -> Apps Script.
 // 3. Borra el código existente y pega este archivo completo.
-// 4. (Opcional) Crea una carpeta en Google Drive para los comprobantes, copia su ID y pégala en DRIVE_FOLDER_ID abajo.
-// 5. Haz clic en "Guardar" (icono de disquete).
-// 6. Haz clic en "Implementar" (botón azul) -> "Nueva implementación".
-// 7. Selecciona tipo: "Aplicación web". En "Quién tiene acceso", selecciona "Cualquiera" (Anyone).
-// 8. Haz clic en "Implementar", autoriza los permisos con tu cuenta de Google y copia la URL de la aplicación web.
-// 9. Si la URL es diferente a la configurada en tu js/config.js, actualízala ahí.
+// 4. Crea una carpeta en Google Drive para los comprobantes, copia su ID y pégalo en DRIVE_FOLDER_ID abajo.
+// 5. (Importante) Configura DRIVE_FOLDER_ID en la línea 20 con el ID de tu carpeta de Drive.
+// 6. Haz clic en "Guardar" (icono de disquete).
+// 7. Haz clic en "Implementar" (botón azul) -> "Nueva implementación".
+// 8. Selecciona tipo: "Aplicación web". En "Quién tiene acceso", selecciona "Cualquiera" (Anyone).
+// 9. Haz clic en "Implementar", autoriza los permisos con tu cuenta de Google y copia la URL de la aplicación web.
+// 10. Si la URL es diferente a la configurada en tu js/config.js, actualízala ahí.
 
 // CONFIGURACIONES GLOBALES
-const DRIVE_FOLDER_ID = ""; // Opcional: ID de carpeta de Drive para guardar recibos. Si se deja vacío, se guardarán en la raíz.
+// ⚠️ IMPORTANTE: Configura tu carpeta de Drive para los comprobantes
+// 1. Crea una carpeta en Google Drive
+// 2. Abre la carpeta, copia la ID de la URL (ej: https://drive.google.com/drive/folders/ABC123)
+// 3. Pega la ID aquí entre comillas
+// Si se deja vacío, los comprobantes se guardarán en la raíz de Drive.
+const DRIVE_FOLDER_ID = "TU_CARPETA_DRIVE_ID_AQUI";
 
 function doPost(e) {
   try {
